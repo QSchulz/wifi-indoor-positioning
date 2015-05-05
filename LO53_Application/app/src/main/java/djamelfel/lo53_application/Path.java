@@ -1,12 +1,10 @@
-package fr.utbm.myapplication;
+package djamelfel.lo53_application;
 
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 /**
  * Created by djamel on 05/05/15.
  */
-public class Path extends Position{
+public class Path {
     private List<Position> path;
     private Date lastUpdate;
 
@@ -20,19 +18,53 @@ public class Path extends Position{
     }
 
     public Date getLastUpdate() {
+        if (isEmpty()) {
+            return null;
+        }
         return lastUpdate;
     }
 
     public List<Position> getPath(boolean smooth) {
+        if (isEmpty()) {
+            return null;
+        }
+        else if(smooth) {
+            return getSmooth(this.path);
+        }
+        return this.path;
     }
 
     public List<Position> getInterval(Date begin, Date end, boolean smooth) {
+        if (isEmpty()) {
+            return null;
+        }
+        List<Position> path_tmp = new ArrayList<Position>();
+        Date timestamp;
+        Iterator itr = this.path.iterator();
+        while(itr.hasNext()) {
+           Position position = (Position)itr.next();
+           timestamp = position.getTimestamp();
+           if (timestamp.getTime() < end.getTime() && timestamp.getTime() > begin.getTime()) {
+               path_tmp.add(position);
+           }
+        }
+        if (smooth) {
+            return getSmooth(path_tmp);
+        }
+        return path_tmp;
     }
 
     public List<Position> getSmooth(List<Position> path) {
+        return null;
     }
 
-    public List<Position> getLastPosition() {
+    public Position getLastPosition() {
+        Iterator itr = this.path.iterator();
+        Position position = null;
+        while(itr.hasNext()) {
+            position = new Position((Position)itr.next());
+        }
+        return position;
     }
 
     public boolean isEmpty() {

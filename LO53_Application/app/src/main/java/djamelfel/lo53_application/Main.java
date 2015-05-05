@@ -7,11 +7,14 @@ import android.view.MenuItem;
 
 
 public class Main extends Activity {
+    private Path path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        path = new Path();
     }
 
     @Override

@@ -1,7 +1,6 @@
-package fr.utbm.myapplication;
+package djamelfel.lo53_application;
 
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 /**
  * Created by djamel on 05/05/15.
  */
@@ -16,20 +15,20 @@ public class Server {
         return this.ipServer;
     }
 
-    public Objects getCurrentPosition() {
-        Objects position;
+    public Object getCurrentPosition() {
+        Object position = null;
 
         return position;
     }
 
-    public Objects getPath() {
-        Objects path;
+    public Object getPath() {
+        Object path = null ;
 
         return path;
     }
 
-    public Objects updatePath(Date date){
-        Objects path;
+    public Object updatePath(Date date){
+        Object path = null;
 
         return path;
     }
