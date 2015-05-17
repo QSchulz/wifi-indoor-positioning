@@ -1,0 +1,5 @@
+LO53_ServerSide/libs/*
+LO53_ServerSide/target/*
+LO53_ServerSide/.settings/*
+LO53_ServerSide/.classpath
+LO53_ServerSide/.project
