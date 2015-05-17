@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+    <class name="fr.utbm.LO53_IPS.models.Device" table="device" catalog="bdd_LO53">
+        <id name="deviceID" type="java.lang.Integer">
+            <column name="deviceID" />
+            <generator class="identity" />
+        </id>
+        <property name="MACAddress" type="string">
+            <column name="MACAddress" length="45" not-null="true"/>
+        </property>
+        <property name="Name" type="string">
+            <column name="Name" length="45" not-null="false" />
+        </property>
+        <set name="positions" inverse="true">
+            <key column="FK_DeviceID"/>
+            <one-to-many class="fr.utbm.LO53_IPS.models.Position" />
+        </set>
+    </class>
+</hibernate-mapping>
