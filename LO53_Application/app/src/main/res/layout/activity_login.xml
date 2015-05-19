@@ -18,7 +18,7 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/label_validate"
+        android:text="@string/validate"
         android:id="@+id/button_ipAddress"
         android:layout_below="@+id/text_ipAddress"
         android:layout_alignParentRight="true"
