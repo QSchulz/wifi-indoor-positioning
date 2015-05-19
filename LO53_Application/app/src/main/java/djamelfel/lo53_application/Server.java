@@ -7,7 +7,7 @@ import java.util.*;
 public class Server {
     private String ipServer;
 
-    public void SetIpServer(String ipServer) {
+    public void setIpServer(String ipServer) {
         this.ipServer = ipServer;
     }
 
