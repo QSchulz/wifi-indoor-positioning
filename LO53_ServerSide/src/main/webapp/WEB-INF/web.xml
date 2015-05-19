@@ -4,13 +4,22 @@
 
 <web-app>
 
-
   <display-name>Archetype Created Web Application</display-name>
   
   <servlet>
 		<servlet-name>AndroidDeviceServlet</servlet-name>
 		<servlet-class>fr.utbm.LO53_IPS.servlets.AndroidDeviceServlet</servlet-class>
 	</servlet>
+
+	<servlet>
+		<servlet-name>AccessPointServlet</servlet-name>
+		<servlet-class>fr.utbm.LO53_IPS.servlets.AccessPointServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AccessPointServlet</servlet-name>
+		<url-pattern>/saveDevice</url-pattern>
+	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>AndroidDeviceServlet</servlet-name>

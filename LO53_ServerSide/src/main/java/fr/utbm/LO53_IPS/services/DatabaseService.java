@@ -14,6 +14,7 @@ import org.hibernate.Session;
 
 import fr.utbm.LO53_IPS.models.Coordinate;
 import fr.utbm.LO53_IPS.models.Device;
+import fr.utbm.LO53_IPS.models.NewDeviceModel;
 import fr.utbm.LO53_IPS.util.HibernateUtil;
 import fr.utbm.LO53_IPS.models.Position;
 
@@ -74,11 +75,35 @@ public class DatabaseService {
 			System.out.println(position);
 		}
 
+		HibernateUtil.shutdown();
+		
 		return positions;
 	}
 
 	public Position getLastKnownPositionFromDatabase(String macAddress) {
 		return null;
+	}
+	
+	public void saveUserIfNotExists(NewDeviceModel model){
+		Session session = HibernateUtil.createSessionFactory().openSession();
+		String queryString =  "select count(*)" 
+							+ " from Device as device"
+							+ " where device.MACAddress = '" + model.getDeviceMACAddress() + "'";
+		Query query = session.createQuery(queryString);
+		Long count = (Long) query.uniqueResult();
+		if(count == 0){ // user doesn't exist, we save it to the db
+			saveUser(model);
+		}
+		HibernateUtil.shutdown();
+	}
+	
+	private void saveUser(NewDeviceModel model){
+		Session session = HibernateUtil.createSessionFactory().openSession();
+		session.beginTransaction();
+		Device device = new Device(model.getDeviceMACAddress(), "");
+		session.save(device);
+		session.getTransaction().commit();
+		HibernateUtil.shutdown();
 	}
 
 }
