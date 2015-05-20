@@ -10,13 +10,13 @@ public class Draw {
     private Paint _paint;
     private Bitmap _bitmap;
     private Canvas _canvas;
-    private Bitmap _saved;
 
-    public Draw(Bitmap bitmap) {
+    public Draw(Bitmap bitmap, int color) {
         Bitmap workingBitmap = Bitmap.createBitmap(bitmap);
         _bitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888, true);
         _canvas = new Canvas(_bitmap);
         _paint = new Paint();
+        this.setColor(color);
     }
 
     public void setColor(int color) {
@@ -27,12 +27,19 @@ public class Draw {
         return _canvas;
     }
 
-    public void drawCircle(int cx, int cy, int radius, ImageView image) {
+    public void drawPoint(int cx, int cy, int radius, ImageView image) {
         _canvas.drawCircle(cx, cy, radius, _paint);
         image.setImageBitmap(_bitmap);
     }
 
-    public void drawPath() {
-        //_canvas.drawPath(android.graphics.Path, android.graphics.Paint);
+    public void drawPath(int cx, int cy, int radius, ImageView image) {
+        _paint.setStrokeWidth(radius);
+        _canvas.drawLine(0, 0, cx, cy, _paint);
+        image.setImageBitmap(_bitmap);
+    }
+
+
+    public void cleanDraw(ImageView image) {
+        image.setImageBitmap(_bitmap);
     }
 }

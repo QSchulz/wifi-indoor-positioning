@@ -14,6 +14,9 @@ import android.widget.ImageView;
 
 
 public class Maps extends Activity implements View.OnClickListener{
+    private Bitmap _bitmap;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,25 +32,34 @@ public class Maps extends Activity implements View.OnClickListener{
         bDraw.setOnClickListener(this);
         Button bClean = (Button)findViewById(R.id.clean);
         bClean.setOnClickListener(this);
+
+        _bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.batiment_h);
     }
 
     @Override
     public void onClick(View vue) {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.batiment_h);
-        final Draw d = new Draw(bitmap);
-        d.setColor(Color.BLUE);
+        Draw _draw = new Draw(_bitmap, Color.BLUE);
 
-        final EditText e1 = (EditText) findViewById(R.id.editText);
-        final EditText e2 = (EditText) findViewById(R.id.editText2);
-        e1.setHint(d.getCanvas().getWidth() + "");
-        e2.setHint(d.getCanvas().getHeight() + "");
+        EditText e1 = (EditText) findViewById(R.id.editText);
+        EditText e2 = (EditText) findViewById(R.id.editText2);
+        e1.setHint(_draw.getCanvas().getWidth() + "");
+        e2.setHint(_draw.getCanvas().getHeight() + "");
 
         ImageView imageView = (ImageView)findViewById(R.id.maps);
         switch (vue.getId()) {
             case R.id.draw:
-                d.drawCircle(Integer.parseInt(e1.getText().toString()),
+                _draw.drawPoint(Integer.parseInt(e1.getText().toString()),
                         Integer.parseInt(e2.getText().toString()),
-                        10, imageView);
+                        30, imageView);
+
+                _draw.setColor(Color.RED);
+                _draw.drawPath(Integer.parseInt(e1.getText().toString()),
+                        Integer.parseInt(e2.getText().toString()),
+                        20, imageView);
+                break;
+
+            case R.id.clean:
+                _draw.cleanDraw(imageView);
                 break;
         }
     }
