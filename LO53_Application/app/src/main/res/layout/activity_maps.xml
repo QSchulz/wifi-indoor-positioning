@@ -1,16 +1,43 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent" android:id="@+id/layout"
     tools:context="djamelfel.lo53_application.FullscreenActivity">
 
 
-    <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:layout_gravity="center_horizontal|bottom">
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editText2"
+        android:textSize="10sp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editText"
+        android:textSize="10sp"
+        android:layout_gravity="right|top" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <view
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            class="djamelfel.lo53_application.TouchImageView"
+            android:id="@+id/batiment_h"
+            android:layout_gravity="center|top"
+            android:src="@drawable/batiment_h"
+            android:layout_weight="1" />
 
         <LinearLayout android:id="@+id/fullscreen_content_controls" style="?metaButtonBarStyle"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
+            android:layout_width="fill_parent" android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
             android:background="@color/black_overlay" android:orientation="horizontal"
             tools:ignore="UselessParent">
 
@@ -32,30 +59,5 @@
 
         </LinearLayout>
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/editText2"
-            android:textSize="10sp" />
-
-        <ImageView
-            android:layout_width="459dp"
-            android:layout_height="244dp"
-            android:id="@+id/batiment_h"
-            android:layout_gravity="center_horizontal|top"
-            android:src="@drawable/batiment_h"
-            android:contentDescription="@string/description_carte" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/editText"
-            android:textSize="10sp"
-            android:layout_gravity="right|top" />
-
-    </FrameLayout>
+    </LinearLayout>
 </FrameLayout>
