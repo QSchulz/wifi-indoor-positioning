@@ -1,18 +1,23 @@
 package djamelfel.lo53_application;
 
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import java.util.*;
-/**
- * Created by djamel on 05/05/15.
- */
-public class Server {
-    private String ipServer;
 
-    public void setIpServer(String ipServer) {
-        this.ipServer = ipServer;
+
+public class Server {
+    private String _ipServer;
+    private String _macAddress;
+
+    public Server(String ipServer, WifiManager manager) {
+        _ipServer = ipServer;
+
+        WifiInfo info = manager.getConnectionInfo();
+        _macAddress = info.getMacAddress();
     }
 
-    public String getIpServer() {
-        return this.ipServer;
+    public String get_ipServer() {
+        return this._ipServer;
     }
 
     public Object getCurrentPosition() {
@@ -31,5 +36,9 @@ public class Server {
         Object path = null;
 
         return path;
+    }
+
+    public String getMacAddress() {
+        return _macAddress;
     }
 }
