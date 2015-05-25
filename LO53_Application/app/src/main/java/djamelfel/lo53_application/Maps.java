@@ -13,10 +13,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import com.loopj.android.http.RequestParams;
 
 
-public class Maps extends Activity implements View.OnClickListener {
+public class Maps extends Activity implements View.OnClickListener, Callback {
     private Bitmap _bitmap;
+    private Server _server;
 
 
     @Override
@@ -33,10 +35,10 @@ public class Maps extends Activity implements View.OnClickListener {
          * Setup Server with MAC Address and IP Address
          */
         WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        Server server = new Server(intent.getStringExtra("setIPAddress"), manager);
+        _server = new Server(intent.getStringExtra("setIPAddress"), manager);
 
-        Log.d("IP Address", server.getMacAddress());
-        Log.d("IP Address", server.get_ipServer());
+        Log.d("MAC Address", _server.getMacAddress());
+        Log.d("IP Address", _server.get_ipServer());
 
         /**
          * Set listener on button
@@ -51,32 +53,56 @@ public class Maps extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View vue) {
-        Draw _draw = new Draw(_bitmap, Color.BLUE);
+        final Draw _draw = new Draw(_bitmap, Color.BLUE);
 
-        EditText e1 = (EditText) findViewById(R.id.editText);
-        EditText e2 = (EditText) findViewById(R.id.editText2);
+        final EditText e1 = (EditText) findViewById(R.id.editText);
+        final EditText e2 = (EditText) findViewById(R.id.editText2);
         e1.setHint(_draw.getCanvas().getWidth() + "");
         e2.setHint(_draw.getCanvas().getHeight() + "");
 
-        ImageView imageView = (ImageView)findViewById(R.id.batiment_h);
+        final ImageView imageView = (ImageView)findViewById(R.id.batiment_h);
         switch (vue.getId()) {
             /**
              * Draw position was clicked
              */
             case R.id.drawPosition:
-                _draw.drawPoint(Integer.parseInt(e1.getText().toString()),
-                        Integer.parseInt(e2.getText().toString()),
-                        30, imageView);
+                /**
+                 * Check if data are update
+                 */
+
+                /**
+                 * If data are not updated Request HTTP
+                 */
+                _server.sendRequest("/test", null, new Callback() {
+                    @Override
+                    public void callbackFunction(String resp) {
+                        Log.d("Callback", resp);
+                        /**
+                         * Draw data on the maps
+                         */
+                        _draw.drawPoint(Integer.parseInt(e1.getText().toString()),
+                                Integer.parseInt(e2.getText().toString()),
+                                30, imageView);
+                    }
+                });
+
                 break;
             /**
              * Draw path was clicked
              */
             case R.id.drawPath:
+                RequestParams params = new RequestParams();
+                params.put("key", "value");
+
                 _draw.setColor(Color.RED);
                 _draw.drawPath(Integer.parseInt(e1.getText().toString()),
                         Integer.parseInt(e2.getText().toString()),
                         20, imageView);
                 break;
         }
+    }
+
+    @Override
+    public void callbackFunction(String response) {
     }
 }

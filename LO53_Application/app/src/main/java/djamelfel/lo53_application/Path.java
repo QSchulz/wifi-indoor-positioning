@@ -1,5 +1,6 @@
 package djamelfel.lo53_application;
 
+
 import java.util.*;
 /**
  * Created by djamel on 05/05/15.
@@ -70,4 +71,5 @@ public class Path {
     public boolean isEmpty() {
         return path.isEmpty();
     }
+
 }
