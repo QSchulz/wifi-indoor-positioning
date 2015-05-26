@@ -1,6 +1,8 @@
 package fr.utbm.LO53_IPS.services;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Joiner;
@@ -25,6 +27,30 @@ public class JSONService {
 		JSONPositionsString += Joiner.on(",").join(JSONPositions);
 		JSONPositionsString += "]}";
 		return JSONPositionsString;
+	}
+	
+	public String buildDeviceMACAddressesJSON(List<String> MACAddresses){
+		
+		String JSONMACAddressesString = "{\"MACAddresses\":[";
+		List<String> quotedMACAddresses = surroundStringListWithQuotes(MACAddresses);
+		JSONMACAddressesString += Joiner.on(",").join(quotedMACAddresses);
+		JSONMACAddressesString += "]}";
+		return JSONMACAddressesString;
+	}
+	
+	private List<String> surroundStringListWithQuotes(List<String> notQuotedStrings){
+		
+		List<String> quotedStrings = new ArrayList<String>();
+		
+		for(String s : notQuotedStrings){
+			quotedStrings.add(surroundWithQuotes(s));
+		}
+		
+		return quotedStrings;
+	}
+	
+	private String surroundWithQuotes(String string){
+		return "\""+string+"\"";
 	}
 	
 }

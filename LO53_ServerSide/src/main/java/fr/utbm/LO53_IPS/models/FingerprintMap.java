@@ -44,7 +44,7 @@ public class FingerprintMap {
 	public Coordinate findPosition(List<RSSIHistogram> vector_RSSI_Histogram, Device device){
 		boolean test = false;
 		int i = 1;
-		Coordinate last_position_user = device.getPositions().get(device.getPositions().size()).getPosition();
+		Coordinate last_position_user = device.getPositions().get(device.getPositions().size()).getCoordinate();
 		List<HistogramFingerprint> search_zone = find_circle(last_position_user,i);
 		List<Double> distance = new ArrayList<Double>();
 		double distance_min;

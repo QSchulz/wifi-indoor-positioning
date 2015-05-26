@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="fr.utbm.LO53_IPS.models.AccessPoint" table="ACCESS_POINT" catalog="bdd_LO53">
+        <id name="AccessPointID" type="java.lang.Integer">
+            <column name="AccessPointID" />
+            <generator class="identity" />
+        </id>
+        
+		<property name="MACAddress" type="java.lang.String">
+            <column name="MACAddress" not-null="true"/>
+        </property>
+        
+        <component name="Coordinate" class="fr.utbm.LO53_IPS.models.Coordinate">
+			<property name="x" type="java.lang.Integer">
+				<column name="x" not-null="true" />
+			</property>
+			<property name="y" type="java.lang.Integer">
+				<column name="y" not-null="true" />
+			</property>
+		</component>
+    </class>
+</hibernate-mapping>

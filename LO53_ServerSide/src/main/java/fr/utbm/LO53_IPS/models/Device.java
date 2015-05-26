@@ -1,5 +1,6 @@
 package fr.utbm.LO53_IPS.models;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -7,13 +8,13 @@ public class Device {
 	private Integer deviceID;
 	private String MACAddress;
 	private String name;
-	private Set<Position> positions = null;
+	private List<Position> positions = null;
 	
-	public Set<Position> getPositions() {
+	public List<Position> getPositions() {
 		return positions;
 	}
 
-	public void setPositions(Set<Position> positions) {
+	public void setPositions(List<Position> positions) {
 		this.positions = positions;
 	}
 
@@ -21,7 +22,7 @@ public class Device {
 		
 	}
 	
-	public Device(Integer deviceID, String MACAddress, String name, Set<Position> positions)
+	public Device(Integer deviceID, String MACAddress, String name, List<Position> positions)
 	{
 		this.deviceID = deviceID;
 		this.MACAddress = MACAddress;
@@ -29,7 +30,7 @@ public class Device {
 		this.positions = positions;
 	}
 	
-	public Device(String MACAddress, String name, Set<Position> positions)
+	public Device(String MACAddress, String name, List<Position> positions)
 	{
 		this.MACAddress = MACAddress;
 		this.name = name;

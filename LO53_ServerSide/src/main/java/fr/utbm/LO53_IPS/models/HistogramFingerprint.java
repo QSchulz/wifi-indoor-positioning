@@ -2,23 +2,24 @@ package fr.utbm.LO53_IPS.models;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class HistogramFingerprint {
 	
 	private Integer fingerprintID;
-	private Set<RSSIHistogram> histogramSamples;
+	private List<RSSIHistogram> histogramSamples;
 	private Coordinate coordinate;
 	
 	public HistogramFingerprint(){}
 	
-	public HistogramFingerprint(Set<RSSIHistogram> Histogram_Samples, Coordinate coordinate){
+	public HistogramFingerprint(List<RSSIHistogram> Histogram_Samples, Coordinate coordinate){
 		this.histogramSamples = Histogram_Samples;
 		this.coordinate = coordinate;
 	}
 	
 	public HistogramFingerprint(Coordinate coordinate){
-		this.histogramSamples = new HashSet<RSSIHistogram>();
+		this.histogramSamples = new ArrayList<RSSIHistogram>();
 		this.coordinate = coordinate;
 	}
 	
@@ -30,11 +31,11 @@ public class HistogramFingerprint {
 		this.coordinate = coordinate;
 	}
 
-	public void setHistogramSamples(Set<RSSIHistogram> histogramSamples) {
+	public void setHistogramSamples(List<RSSIHistogram> histogramSamples) {
 		this.histogramSamples = histogramSamples;
 	}
 
-	public Set<RSSIHistogram> getHistogramSamples() {
+	public List<RSSIHistogram> getHistogramSamples() {
 		return histogramSamples;
 	}
 

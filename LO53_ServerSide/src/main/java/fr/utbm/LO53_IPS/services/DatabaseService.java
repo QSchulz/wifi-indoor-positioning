@@ -42,7 +42,7 @@ public class DatabaseService {
 				calendar2.getTimeInMillis()));
 		;
 
-		Set<Position> positions = new HashSet();
+		List<Position> positions = new ArrayList();
 		positions.add(position1);
 		positions.add(position2);
 
@@ -66,17 +66,20 @@ public class DatabaseService {
 
 		AccessPoint accessPoint = new AccessPoint("A1:B2:C3:D4:F6:E5", new Coordinate(3, 4));
 		
-		BarRSSIHistogram bar1 = new BarRSSIHistogram(40.3, 4);
-		BarRSSIHistogram bar2 = new BarRSSIHistogram(35, 2);
-		BarRSSIHistogram bar3 = new BarRSSIHistogram(45.5, 3);
-		Set<BarRSSIHistogram> barList = new HashSet<BarRSSIHistogram>();
+		
+		HistogramFingerprint fingerprint = new HistogramFingerprint(new Coordinate(2, 2));
+		RSSIHistogram RSSIHistogram = new RSSIHistogram(accessPoint, fingerprint);
+		fingerprint.getHistogramSamples().add(RSSIHistogram);
+		
+		BarRSSIHistogram bar1 = new BarRSSIHistogram(40.3, 4, RSSIHistogram);
+		BarRSSIHistogram bar2 = new BarRSSIHistogram(35, 2, RSSIHistogram);
+		BarRSSIHistogram bar3 = new BarRSSIHistogram(45.5, 3, RSSIHistogram);
+		List<BarRSSIHistogram> barList = new ArrayList<BarRSSIHistogram>();
 		barList.add(bar1);
 		barList.add(bar2);
 		barList.add(bar3);
 		
-		HistogramFingerprint fingerprint = new HistogramFingerprint(new Coordinate(2, 2));
-		RSSIHistogram RSSIHistogram = new RSSIHistogram(null, accessPoint, fingerprint);
-		fingerprint.getHistogramSamples().add(RSSIHistogram);
+		RSSIHistogram.setValue(barList);
 		
 		session.save(accessPoint);
 		session.save(fingerprint);
@@ -137,4 +140,28 @@ public class DatabaseService {
 		HibernateUtil.shutdown();
 	}
 
+	public List<String> getDevicesMACAddress(){
+		
+		Session session = HibernateUtil.createSessionFactory().openSession();
+
+		String queryString =  "select distinct MACAddress" 
+							+ " from Device device";
+		
+		Query query = session.createQuery(queryString);
+		List list = query.list();
+		Iterator it = list.iterator();
+		
+		List<String> MACAddresses = new ArrayList();
+		
+		while (it.hasNext()) {
+			String MACAddress = (String) it.next();
+			MACAddresses.add(MACAddress);
+			System.out.println(MACAddress);
+		}
+
+		HibernateUtil.shutdown();
+		
+		return MACAddresses;
+		
+	}
 }

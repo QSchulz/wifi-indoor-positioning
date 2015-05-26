@@ -4,12 +4,14 @@ public class BarRSSIHistogram {
 	private Integer barRSSIHistogramID;
 	private Double value;
 	private Integer occurences;
+	private RSSIHistogram rssiHistogram;
 	
 	public BarRSSIHistogram(){}
 	
-	public BarRSSIHistogram(double value, int occurences){
+	public BarRSSIHistogram(double value, int occurences, RSSIHistogram rssiHistogram){
 		this.value = value;
 		this.occurences = occurences;
+		this.rssiHistogram = rssiHistogram;
 	}
 	
 	public BarRSSIHistogram(Integer barRSSIHistogramID, double value, int occurences){
@@ -48,5 +50,13 @@ public class BarRSSIHistogram {
 
 	public void setOccurences(Integer occurences) {
 		this.occurences = occurences;
+	}
+
+	public RSSIHistogram getRssiHistogram() {
+		return rssiHistogram;
+	}
+
+	public void setRssiHistogram(RSSIHistogram rssiHistogram) {
+		this.rssiHistogram = rssiHistogram;
 	}
 }

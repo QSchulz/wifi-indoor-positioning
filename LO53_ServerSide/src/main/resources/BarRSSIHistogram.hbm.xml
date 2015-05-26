@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="fr.utbm.LO53_IPS.models.BarRSSIHistogram" table="RSSI_OCCURENCES" catalog="bdd_LO53">
+        <id name="barRSSIHistogramID" type="java.lang.Integer">
+            <column name="RSSIOccurenceID" />
+            <generator class="identity" />
+        </id>
+        
+		<property name="value" type="java.lang.Double">
+            <column name="value" not-null="true"/>
+        </property>
+        
+        <property name="occurences" type="java.lang.Integer">
+            <column name="occurences" not-null="true"/>
+        </property>
+        
+        <many-to-one name="rssiHistogram" column="FK_HistogramID" 
+        	class="fr.utbm.LO53_IPS.models.RSSIHistogram" not-null="true"/>	
+        	
+    </class>
+</hibernate-mapping>

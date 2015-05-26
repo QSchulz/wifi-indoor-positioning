@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+    <class name="fr.utbm.LO53_IPS.models.HistogramFingerprint" table="fingerprint" catalog="bdd_LO53">
+        <id name="fingerprintID" type="java.lang.Integer">
+            <column name="FingerprintID" />
+            <generator class="identity" />
+        </id>
+        
+        <component name="Coordinate" class="fr.utbm.LO53_IPS.models.Coordinate">
+			<property name="x" type="java.lang.Integer">
+				<column name="x" not-null="true" />
+			</property>
+			<property name="y" type="java.lang.Integer">
+				<column name="y" not-null="true" />
+			</property>
+		</component>
+        
+        <bag name="histogramSamples" inverse="true" table="RSSI_HISTOGRAM" lazy="false" cascade="save-update">
+            <key column="FK_FingerprintID" not-null="true"/>
+            <one-to-many class="fr.utbm.LO53_IPS.models.RSSIHistogram" />
+        </bag>
+        	
+    </class>
+</hibernate-mapping>

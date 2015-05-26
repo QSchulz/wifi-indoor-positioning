@@ -1,6 +1,7 @@
 package fr.utbm.LO53_IPS.models;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class RSSIHistogram {
@@ -8,29 +9,36 @@ public class RSSIHistogram {
 	private Device device; // if histogram comming from an AP measurement : it's linked to a device (can be null)
 	private AccessPoint accessPoint;
 	private HistogramFingerprint fingerprint;
-	private Set<BarRSSIHistogram> value;
+	private List<BarRSSIHistogram> value;
 	
 	public RSSIHistogram(){}
 
-	public RSSIHistogram(Set<BarRSSIHistogram> value, AccessPoint accessPoint, HistogramFingerprint fingerprint){
+	public RSSIHistogram(List<BarRSSIHistogram> value, AccessPoint accessPoint, HistogramFingerprint fingerprint){
 		this.value = value;
 		this.accessPoint = accessPoint;
 		this.fingerprint = fingerprint;
 		this.device = null;
 	}
 	
-	public RSSIHistogram(Set<BarRSSIHistogram> value, Device device, AccessPoint accessPoint){
+	public RSSIHistogram(List<BarRSSIHistogram> value, Device device, AccessPoint accessPoint){
 		this.value = value;
 		this.device = device;
 		this.accessPoint = accessPoint;
 	}
-	
-	public Set<BarRSSIHistogram> getValue() {
-		return value;
-	}
 
-	public void setValue(Set<BarRSSIHistogram> value) {
+	public void setValue(List<BarRSSIHistogram> value) {
 		this.value = value;
+	}
+	
+	public List<BarRSSIHistogram> getValue() {
+		return this.value;
+	}
+	
+	public RSSIHistogram(AccessPoint accessPoint, HistogramFingerprint fingerprint){
+		this.value = null;
+		this.accessPoint = accessPoint;
+		this.fingerprint = fingerprint;
+		this.device = null;
 	}
 
 	public Device getDevice() {
