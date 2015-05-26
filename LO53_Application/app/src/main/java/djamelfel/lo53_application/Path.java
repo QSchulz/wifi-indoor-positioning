@@ -1,11 +1,10 @@
 package djamelfel.lo53_application;
 
 
-import android.util.Log;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -20,21 +19,21 @@ public class Path {
 
     public void setPath(JSONObject jsonObject) {
         try {
-            JSONArray jsonArray = jsonObject.getJSONArray("Position");
-            Date timestamp;
-            JSONObject obj;
-            int x, y;
-            for (int i=0; i<jsonArray.length(); i++) {
-                obj = jsonArray.getJSONObject(i);
-                x = Integer.parseInt(obj.getString("x"));
-                y = Integer.parseInt(obj.getString("y"));
-                timestamp = new Date(Long.parseLong(obj.getString("timestamp"))*1000);
+            int x = Integer.parseInt(jsonObject.getString("x"));
+            int y = Integer.parseInt(jsonObject.getString("y"));
+            Date timestamp = null;
 
-                _position.add(new Position(x, y, timestamp));
-
-                if (_lastUpdate.before(timestamp))
-                    _lastUpdate.setTime(timestamp.getTime());
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+                timestamp = format.parse(jsonObject.getString("timestamp"));
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
+
+            _position.add(new Position(x, y, timestamp));
+
+            if (_lastUpdate.before(timestamp))
+                _lastUpdate.setTime(timestamp.getTime());
         } catch (JSONException e) {
             e.printStackTrace();
         }

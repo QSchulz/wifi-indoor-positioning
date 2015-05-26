@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -84,13 +83,13 @@ public class Maps extends Activity implements View.OnClickListener, Callback {
                 _server.sendRequest("/test", null, new Callback() {
                     @Override
                     public void callbackFunction(String resp) {
-                        Log.d("Callback", resp);
+
                         /**
                          * Save data
                          */
                         try {
                             JSONObject jsonObject = new JSONObject(resp);
-                            JSONArray jsonArray = jsonObject.getJSONArray("path");
+                            JSONArray jsonArray = jsonObject.getJSONArray("positions");
                             for (int i=0; i<jsonArray.length(); i++) {
                                 _path.setPath(jsonArray.getJSONObject(i));
                             }
