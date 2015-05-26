@@ -1,28 +1,45 @@
 package djamelfel.lo53_application;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.util.*;
-/**
- * Created by djamel on 05/05/15.
- */
+
+
 public class Path {
-    private List<Position> path;
-    private Date lastUpdate;
+    private List<Position> _position;
+    private Date _lastUpdate;
 
     public Path(){
-        this.path = new ArrayList<Position>();
-        this.lastUpdate = null;
+        _position = new ArrayList<Position>();
+        _lastUpdate = new Date(0);
     }
 
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
+    public void setPath(JSONObject jsonObject) {
+        try {
+            JSONArray jsonArray = jsonObject.getJSONArray("Position");
+            Date timestamp;
+            JSONObject obj;
+            int x, y;
+            for (int i=0; i<jsonArray.length(); i++) {
+                obj = jsonArray.getJSONObject(i);
+                x = Integer.parseInt(obj.getString("x"));
+                y = Integer.parseInt(obj.getString("y"));
+                timestamp = new Date(Long.parseLong(obj.getString("timestamp"))*1000);
 
-    public Date getLastUpdate() {
-        if (isEmpty()) {
-            return null;
+                _position.add(new Position(x, y, timestamp));
+
+                if (_lastUpdate.before(timestamp))
+                    _lastUpdate.setTime(timestamp.getTime());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        return lastUpdate;
+    }
+
+    public Date get_lastUpdate() {
+        return _lastUpdate;
     }
 
     public List<Position> getPath(boolean smooth) {
@@ -30,9 +47,9 @@ public class Path {
             return null;
         }
         else if(smooth) {
-            return getSmooth(this.path);
+            return getSmooth(_position);
         }
-        return this.path;
+        return _position;
     }
 
     public List<Position> getInterval(Date begin, Date end, boolean smooth) {
@@ -41,7 +58,7 @@ public class Path {
         }
         List<Position> path_tmp = new ArrayList<Position>();
         Date timestamp;
-        Iterator itr = this.path.iterator();
+        Iterator itr = _position.iterator();
         while(itr.hasNext()) {
            Position position = (Position)itr.next();
            timestamp = position.getTimestamp();
@@ -60,16 +77,15 @@ public class Path {
     }
 
     public Position getLastPosition() {
-        Iterator itr = this.path.iterator();
+        Iterator itr = _position.iterator();
         Position position = null;
         while(itr.hasNext()) {
-            position = new Position((Position)itr.next());
+            //position = new Position((Position)itr.next());
         }
         return position;
     }
 
     public boolean isEmpty() {
-        return path.isEmpty();
+        return _position.isEmpty();
     }
-
 }

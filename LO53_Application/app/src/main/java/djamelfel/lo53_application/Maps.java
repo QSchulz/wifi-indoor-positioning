@@ -13,12 +13,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class Maps extends Activity implements View.OnClickListener, Callback {
     private Bitmap _bitmap;
     private Server _server;
+    private Path _path;
 
 
     @Override
@@ -37,8 +43,10 @@ public class Maps extends Activity implements View.OnClickListener, Callback {
         WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         _server = new Server(intent.getStringExtra("setIPAddress"), manager);
 
-        Log.d("MAC Address", _server.getMacAddress());
-        Log.d("IP Address", _server.get_ipServer());
+        /**
+         * Set Path object
+         */
+        _path = new Path();
 
         /**
          * Set listener on button
@@ -77,6 +85,19 @@ public class Maps extends Activity implements View.OnClickListener, Callback {
                     @Override
                     public void callbackFunction(String resp) {
                         Log.d("Callback", resp);
+                        /**
+                         * Save data
+                         */
+                        try {
+                            JSONObject jsonObject = new JSONObject(resp);
+                            JSONArray jsonArray = jsonObject.getJSONArray("path");
+                            for (int i=0; i<jsonArray.length(); i++) {
+                                _path.setPath(jsonArray.getJSONObject(i));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                         /**
                          * Draw data on the maps
                          */
