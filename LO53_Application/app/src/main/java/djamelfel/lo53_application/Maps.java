@@ -101,9 +101,8 @@ public class Maps extends Activity implements View.OnClickListener, Callback {
                         /**
                          * Draw data on the maps
                          */
-                        _draw.drawPoint(Integer.parseInt(e1.getText().toString()),
-                                Integer.parseInt(e2.getText().toString()),
-                                30, imageView);
+                        Position position = _path.getLastPosition();
+                        _draw.drawPoint(position.getX(), position.getY(), 30, imageView);
                     }
                 });
 

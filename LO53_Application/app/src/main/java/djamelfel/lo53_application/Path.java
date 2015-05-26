@@ -1,6 +1,8 @@
 package djamelfel.lo53_application;
 
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,9 +80,9 @@ public class Path {
 
     public Position getLastPosition() {
         Iterator itr = _position.iterator();
-        Position position = null;
+        Position position = (Position)itr.next();
         while(itr.hasNext()) {
-            //position = new Position((Position)itr.next());
+            position = (Position)itr.next();
         }
         return position;
     }
