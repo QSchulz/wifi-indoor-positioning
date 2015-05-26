@@ -14,15 +14,16 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".Login"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".Maps"
+            android:name=".Trace"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:screenOrientation="landscape"
             android:label="@string/title_activity_maps" >
         </activity>

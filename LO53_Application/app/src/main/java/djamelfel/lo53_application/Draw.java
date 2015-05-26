@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.widget.ImageView;
-
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,10 +44,6 @@ public class Draw {
     public void drawPath(int x1, int y1, int x2, int y2, int radius, ImageView image) {
         _paint.setStrokeWidth(radius);
         _canvas.drawLine(x1, y1, x2, y2, _paint);
-        image.setImageBitmap(_bitmap);
-    }
-
-    public void cleanDraw(ImageView image) {
         image.setImageBitmap(_bitmap);
     }
 }

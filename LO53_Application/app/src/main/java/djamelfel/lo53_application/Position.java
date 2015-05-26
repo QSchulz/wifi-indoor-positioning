@@ -1,8 +1,7 @@
 package djamelfel.lo53_application;
 
 
-import java.util.*;
-
+import java.util.Date;
 
 public class Position {
     private int _x;

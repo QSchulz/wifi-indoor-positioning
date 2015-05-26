@@ -6,7 +6,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class Path {
@@ -55,25 +58,8 @@ public class Path {
         return _position;
     }
 
-    public List<Position> getInterval(Date begin, Date end, boolean smooth) {
-        List<Position> path_tmp = new ArrayList<Position>();
-        Date timestamp;
-        Iterator itr = _position.iterator();
-        while(itr.hasNext()) {
-           Position position = (Position)itr.next();
-           timestamp = position.getTimestamp();
-           if (timestamp.getTime() < end.getTime() && timestamp.getTime() > begin.getTime()) {
-               path_tmp.add(position);
-           }
-        }
-        if (smooth) {
-            return getSmooth(path_tmp);
-        }
-        return path_tmp;
-    }
-
     public List<Position> getSmooth(List<Position> path) {
-        return null;
+        return path;
     }
 
     public Position getLastPosition() {

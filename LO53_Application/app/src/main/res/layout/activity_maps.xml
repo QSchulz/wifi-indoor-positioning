@@ -12,9 +12,9 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             class="djamelfel.lo53_application.TouchImageView"
-            android:id="@+id/batiment_h"
+            android:id="@+id/batiment"
             android:layout_gravity="center|top"
-            android:src="@drawable/batiment_h"
+            android:src="@drawable/batiment"
             android:layout_weight="1" />
 
         <LinearLayout android:id="@+id/fullscreen_content_controls" style="?metaButtonBarStyle"

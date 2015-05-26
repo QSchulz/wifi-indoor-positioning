@@ -3,11 +3,11 @@ package djamelfel.lo53_application;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import org.apache.http.Header;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
-import com.loopj.android.http.*;
 
 
 
@@ -23,12 +23,26 @@ public class Server {
         _httpClient = new AsyncHttpClient();
     }
 
-    public String get_ipServer() {
-        return this._ipServer;
-    }
-
     public String getMacAddress() {
         return _macAddress;
+    }
+
+    public void connect(final Callback callback) {
+        _httpClient.get(_ipServer + "/connect", null, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
+                try {
+                    callback.callbackFunction(new String(bytes, "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    Log.d("Error", e.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                callback.callbackFunction(error.toString());
+            }
+        });
     }
 
     public void sendRequest(String host, RequestParams params, final Callback callback) {

@@ -15,7 +15,7 @@ import com.loopj.android.http.RequestParams;
 import java.util.Date;
 
 
-public class Maps extends Activity implements View.OnClickListener, Callback {
+public class Trace extends Activity implements View.OnClickListener, Callback {
     private Bitmap _bitmap;
     private Server _server;
     private Path _path;
@@ -50,7 +50,7 @@ public class Maps extends Activity implements View.OnClickListener, Callback {
         Button bClean = (Button)findViewById(R.id.drawPath);
         bClean.setOnClickListener(this);
 
-        _bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.batiment_h);
+        _bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.batiment);
     }
 
     @Override
@@ -58,8 +58,10 @@ public class Maps extends Activity implements View.OnClickListener, Callback {
         final Draw _draw = new Draw(_bitmap, Color.BLUE);
         Date date;
         long timeDifference;
+        RequestParams params = new RequestParams();
+        params.put("macAddress", _server.getMacAddress());
 
-        final ImageView imageView = (ImageView)findViewById(R.id.batiment_h);
+        final ImageView imageView = (ImageView)findViewById(R.id.batiment);
         switch (vue.getId()) {
             /**
              * Draw position was clicked
@@ -74,7 +76,7 @@ public class Maps extends Activity implements View.OnClickListener, Callback {
                     /**
                      * If data are not updated Request HTTP
                      */
-                    _server.sendRequest("/test", null, new Callback() {
+                    _server.sendRequest("/test", params, new Callback() {
                         @Override
                         public void callbackFunction(String resp) {
                             /**
@@ -113,7 +115,7 @@ public class Maps extends Activity implements View.OnClickListener, Callback {
                     /**
                      * If data are not updated Request HTTP
                      */
-                    _server.sendRequest("/test", null, new Callback() {
+                    _server.sendRequest("/test", params, new Callback() {
                         @Override
                         public void callbackFunction(String resp) {
                             /**
@@ -132,9 +134,8 @@ public class Maps extends Activity implements View.OnClickListener, Callback {
                     /**
                      * If data are not updated Request HTTP
                      */
-                    RequestParams params = new RequestParams();
                     params.put("timestamp", _path.get_lastUpdate().toString());
-                    _server.sendRequest("/test", null, new Callback() {
+                    _server.sendRequest("/test", params, new Callback() {
                         @Override
                         public void callbackFunction(String resp) {
                             /**

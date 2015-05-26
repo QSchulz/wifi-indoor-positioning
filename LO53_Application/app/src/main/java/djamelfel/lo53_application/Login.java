@@ -1,13 +1,14 @@
 package djamelfel.lo53_application;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import org.apache.http.conn.util.InetAddressUtils;
 
 
@@ -29,26 +30,26 @@ public class Login extends Activity implements View.OnClickListener {
         String myIpString = _ipAddress.getText().toString();
 
         if (InetAddressUtils.isIPv4Address(myIpString)) {
-            Intent intent = new Intent(Login.this, Maps.class);
+            final Intent intent = new Intent(Login.this, Trace.class);
             intent.putExtra("setIPAddress", myIpString);
-            startActivity(intent);
-        }
-        else {
-            AlertDialog.Builder alert = new AlertDialog.Builder(Login.this);
-            alert
-                .setTitle("wrong IP Address")
-                .setMessage("write an IP Address int the following form: '192.168.0.1'")
-                .setCancelable(false)
-                .setNeutralButton("Return", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        _ipAddress.setText(null);
-                        dialog.cancel();
-                    }
-                });
-            AlertDialog alertDialog = alert.create();
-            alertDialog.show();
-        }
-    }
 
+            WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+            Server server = new Server(myIpString, manager);
+            server.connect(new Callback() {
+                @Override
+                public void callbackFunction(String response) {
+                    if (response.equals("True"))
+                        startActivity(intent);
+                    else
+                        Toast.makeText(getApplicationContext(),
+                                response, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+        else
+            Toast.makeText(getApplicationContext(),
+                "Wrong IP Address:\n'" +
+                "Please try with an IP Address in the following form: '192.168.0.1'",
+                Toast.LENGTH_LONG).show();
+    }
 }
