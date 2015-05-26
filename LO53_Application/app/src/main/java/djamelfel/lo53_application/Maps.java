@@ -10,14 +10,9 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-
 import com.loopj.android.http.RequestParams;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.Date;
 
 
 public class Maps extends Activity implements View.OnClickListener, Callback {
@@ -61,11 +56,8 @@ public class Maps extends Activity implements View.OnClickListener, Callback {
     @Override
     public void onClick(View vue) {
         final Draw _draw = new Draw(_bitmap, Color.BLUE);
-
-        final EditText e1 = (EditText) findViewById(R.id.editText);
-        final EditText e2 = (EditText) findViewById(R.id.editText2);
-        e1.setHint(_draw.getCanvas().getWidth() + "");
-        e2.setHint(_draw.getCanvas().getHeight() + "");
+        Date date;
+        long timeDifference;
 
         final ImageView imageView = (ImageView)findViewById(R.id.batiment_h);
         switch (vue.getId()) {
@@ -76,52 +68,98 @@ public class Maps extends Activity implements View.OnClickListener, Callback {
                 /**
                  * Check if data are update
                  */
+                date = new Date();
+                timeDifference = date.getTime() - _path.get_lastUpdate().getTime();
+                if ( _path.isEmpty() ||  timeDifference < 10000) {
+                    /**
+                     * If data are not updated Request HTTP
+                     */
+                    _server.sendRequest("/test", null, new Callback() {
+                        @Override
+                        public void callbackFunction(String resp) {
+                            /**
+                             * Save data
+                             */
+                            _path.setPath(resp);
 
-                /**
-                 * If data are not updated Request HTTP
-                 */
-                _server.sendRequest("/test", null, new Callback() {
-                    @Override
-                    public void callbackFunction(String resp) {
-
-                        /**
-                         * Save data
-                         */
-                        try {
-                            JSONObject jsonObject = new JSONObject(resp);
-                            JSONArray jsonArray = jsonObject.getJSONArray("positions");
-                            for (int i=0; i<jsonArray.length(); i++) {
-                                _path.setPath(jsonArray.getJSONObject(i));
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            /**
+                             * Draw position on the maps
+                             */
+                            Position position = _path.getLastPosition();
+                            _draw.drawPoint(position.getX(), position.getY(), 30, imageView);
                         }
-
-                        /**
-                         * Draw data on the maps
-                         */
-                        Position position = _path.getLastPosition();
-                        _draw.drawPoint(position.getX(), position.getY(), 30, imageView);
-                    }
-                });
+                    });
+                }
+                else {
+                    /**
+                     * Draw position on the maps
+                     */
+                    Position position = _path.getLastPosition();
+                    _draw.drawPoint(position.getX(), position.getY(), 30, imageView);
+                }
 
                 break;
             /**
              * Draw path was clicked
              */
             case R.id.drawPath:
-                RequestParams params = new RequestParams();
-                params.put("key", "value");
+                /**
+                 * Check if data are update
+                 */
+                date = new Date();
+                timeDifference = date.getTime() - _path.get_lastUpdate().getTime();
 
-                _draw.setColor(Color.RED);
-                _draw.drawPath(Integer.parseInt(e1.getText().toString()),
-                        Integer.parseInt(e2.getText().toString()),
-                        20, imageView);
+                if (_path.isEmpty()) {
+                    /**
+                     * If data are not updated Request HTTP
+                     */
+                    _server.sendRequest("/test", null, new Callback() {
+                        @Override
+                        public void callbackFunction(String resp) {
+                            /**
+                             * Save data
+                             */
+                            _path.setPath(resp);
+
+                            /**
+                             * Draw data on the maps
+                             */
+                            _draw.drawPath(_path.getPath(false), _draw, imageView);
+                        }
+                    });
+                }
+                else if (timeDifference < 10000){
+                    /**
+                     * If data are not updated Request HTTP
+                     */
+                    RequestParams params = new RequestParams();
+                    params.put("timestamp", _path.get_lastUpdate().toString());
+                    _server.sendRequest("/test", null, new Callback() {
+                        @Override
+                        public void callbackFunction(String resp) {
+                            /**
+                             * Save data
+                             */
+                            _path.setPath(resp);
+
+                            /**
+                             * Draw data on the maps
+                             */
+                            _draw.drawPath(_path.getPath(false), _draw, imageView);
+                        }
+                    });
+                }
+                else {
+                    /**
+                     * Draw data on the maps
+                     */
+                    _draw.drawPath(_path.getPath(false), _draw, imageView);
+                }
                 break;
         }
     }
 
     @Override
-    public void callbackFunction(String response) {
+    public void callbackFunction(String resp) {
     }
 }

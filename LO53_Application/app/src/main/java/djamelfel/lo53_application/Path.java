@@ -1,6 +1,7 @@
 package djamelfel.lo53_application;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.text.ParseException;
@@ -17,23 +18,28 @@ public class Path {
         _lastUpdate = new Date(0);
     }
 
-    public void setPath(JSONObject jsonObject) {
+    public void setPath(String resp) {
         try {
-            int x = Integer.parseInt(jsonObject.getString("x"));
-            int y = Integer.parseInt(jsonObject.getString("y"));
-            Date timestamp = null;
+            JSONObject jsonObject = new JSONObject(resp);
+            JSONArray jsonArray = jsonObject.getJSONArray("positions");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonPosition = jsonArray.getJSONObject(i);
+                int x = Integer.parseInt(jsonPosition.getString("x"));
+                int y = Integer.parseInt(jsonPosition.getString("y"));
+                Date timestamp = null;
 
-            try {
-                SimpleDateFormat format = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
-                timestamp = format.parse(jsonObject.getString("timestamp"));
-            } catch (ParseException e) {
-                e.printStackTrace();
+                try {
+                    SimpleDateFormat format = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
+                    timestamp = format.parse(jsonPosition.getString("timestamp"));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                _position.add(new Position(x, y, timestamp));
+
+                if (_lastUpdate.before(timestamp))
+                    _lastUpdate.setTime(timestamp.getTime());
             }
-
-            _position.add(new Position(x, y, timestamp));
-
-            if (_lastUpdate.before(timestamp))
-                _lastUpdate.setTime(timestamp.getTime());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -44,19 +50,12 @@ public class Path {
     }
 
     public List<Position> getPath(boolean smooth) {
-        if (isEmpty()) {
-            return null;
-        }
-        else if(smooth) {
+        if(smooth)
             return getSmooth(_position);
-        }
         return _position;
     }
 
     public List<Position> getInterval(Date begin, Date end, boolean smooth) {
-        if (isEmpty()) {
-            return null;
-        }
         List<Position> path_tmp = new ArrayList<Position>();
         Date timestamp;
         Iterator itr = _position.iterator();
