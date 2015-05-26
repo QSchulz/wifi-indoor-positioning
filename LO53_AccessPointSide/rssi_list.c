@@ -12,19 +12,22 @@
  * \param byte_mac a 6-byte buffer to store the result. byte_mac is returned by the function.
  */
 u_char *string_to_mac( char * buf, u_char * byte_mac ) {
-	int i = 0, j = 0;
+	int i = 0;
 	for ( i = 0; i < 6; i++ ) {
 
 		byte_mac[i] = 0;
-		for ( j = i * 3; j <= i * 3 + 1; j++) {
-
-			if ( buf[j] >= '0' && buf[j] <= '9' ) {
-				byte_mac[i] += buf[j] - 48;
-			}
-			else {
-				byte_mac[i] += buf[j] - 65;
-			}
-
+		
+		if ( buf[ i * 3 ] >= '0' && buf[ i * 3 ] <= '9' ) {
+			byte_mac[i] += ( buf[ i * 3 ] - 48 ) * 16 ;
+		}
+		else {
+			byte_mac[i] += ( buf[ i * 3 ] - 65 + 10 ) * 16;
+		}
+		if ( buf[ i * 3 + 1 ] >= '0' && buf[ i * 3 + 1 ] <= '9' ) {
+			byte_mac[i] += buf[ i * 3 + 1 ] - 48;
+		}
+		else {
+			byte_mac[i] += buf[ i * 3 + 1 ] - 65 + 10;
 		}
 
 	}
