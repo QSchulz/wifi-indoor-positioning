@@ -4,8 +4,8 @@
  
 <hibernate-mapping>
     <class name="fr.utbm.LO53_IPS.models.Position" table="position" catalog="bdd_LO53">
-        <id name="PositionID" type="java.lang.Integer">
-            <column name="PositionID" />
+        <id name="positionID" type="java.lang.Integer">
+            <column name="positionID" />
             <generator class="identity" />
         </id>
         <property name="Timestamp" type="java.sql.Timestamp">

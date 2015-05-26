@@ -5,6 +5,10 @@
 <web-app>
 
   <display-name>Archetype Created Web Application</display-name>
+
+  <listener>
+  	<listener-class>fr.utbm.LO53_IPS.util.ServletListener</listener-class>
+ </listener>
   
   <servlet>
 		<servlet-name>AndroidDeviceServlet</servlet-name>

@@ -2,6 +2,7 @@ package fr.utbm.LO53_IPS.services;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,15 +13,19 @@ import java.util.Set;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import fr.utbm.LO53_IPS.models.AccessPoint;
+import fr.utbm.LO53_IPS.models.BarRSSIHistogram;
 import fr.utbm.LO53_IPS.models.Coordinate;
 import fr.utbm.LO53_IPS.models.Device;
+import fr.utbm.LO53_IPS.models.HistogramFingerprint;
 import fr.utbm.LO53_IPS.models.NewDeviceModel;
-import fr.utbm.LO53_IPS.util.HibernateUtil;
 import fr.utbm.LO53_IPS.models.Position;
+import fr.utbm.LO53_IPS.models.RSSIHistogram;
+import fr.utbm.LO53_IPS.util.HibernateUtil;
 
 public class DatabaseService {
 
-	/* Just a function to work with mock data */
+	/* some functions to work with mock data and test mappings */
 	public void seedDeviceAndPositions() {
 		System.out.println("Maven + Hibernate + MySQL");
 		Session session = HibernateUtil.createSessionFactory().openSession();
@@ -54,6 +59,32 @@ public class DatabaseService {
 		HibernateUtil.shutdown();
 	}
 
+	public void seedFingerprint(){
+		System.out.println("Maven + Hibernate + MySQL");
+		Session session = HibernateUtil.createSessionFactory().openSession();
+		session.beginTransaction();
+
+		AccessPoint accessPoint = new AccessPoint("A1:B2:C3:D4:F6:E5", new Coordinate(3, 4));
+		
+		BarRSSIHistogram bar1 = new BarRSSIHistogram(40.3, 4);
+		BarRSSIHistogram bar2 = new BarRSSIHistogram(35, 2);
+		BarRSSIHistogram bar3 = new BarRSSIHistogram(45.5, 3);
+		Set<BarRSSIHistogram> barList = new HashSet<BarRSSIHistogram>();
+		barList.add(bar1);
+		barList.add(bar2);
+		barList.add(bar3);
+		
+		HistogramFingerprint fingerprint = new HistogramFingerprint(new Coordinate(2, 2));
+		RSSIHistogram RSSIHistogram = new RSSIHistogram(null, accessPoint, fingerprint);
+		fingerprint.getHistogramSamples().add(RSSIHistogram);
+		
+		session.save(accessPoint);
+		session.save(fingerprint);
+		session.getTransaction().commit();
+
+		HibernateUtil.shutdown();
+	}
+	
 	public Set<Position> getAllPositionsFromDatabase(String macAddress) {
 
 		Session session = HibernateUtil.createSessionFactory().openSession();

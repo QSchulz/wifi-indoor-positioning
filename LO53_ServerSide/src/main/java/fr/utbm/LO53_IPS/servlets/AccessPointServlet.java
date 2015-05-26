@@ -28,6 +28,7 @@ public class AccessPointServlet extends HttpServlet {
 	 * The data must be a json looking like this: {"DeviceMACAddress":"A1:B2:C3:D4:E5:F6"}
 	 * TODO : implement it so that we can 
 	 */
+	//saveDevice
 	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException{
 		
 		NewDeviceModel model = getNewDeviceModel(request);

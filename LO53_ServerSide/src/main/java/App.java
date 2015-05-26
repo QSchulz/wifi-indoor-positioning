@@ -13,7 +13,8 @@ public class App {
 	public static void main( String[] args )
     {
 		DatabaseService dbService = new DatabaseService();
-		dbService.seedDeviceAndPositions();
+		//dbService.seedDeviceAndPositions();
+		dbService.seedFingerprint();
 		//Set<Position> positions = dbService.getAllPositionsFromDatabase("A1:B2:C3:D4:E5:F6");
 		//System.out.println(positions);
     }
