@@ -1,11 +1,16 @@
 package fr.utbm.LO53_IPS.models;
 
+
 public class AccessPoint {
 	private Integer AccessPointID;
 	private String MACAddress;
 	private Coordinate coordinate;
 
-	public AccessPoint(){}
+	public AccessPoint(){
+		this.setAccessPointID(0);
+		this.setMACAddress(new String());
+		this.setCoordinate(new Coordinate());
+	}
 	
 	public AccessPoint(Integer AccessPointID, String MACAddress, Coordinate coordinate){
 		this.AccessPointID = AccessPointID;

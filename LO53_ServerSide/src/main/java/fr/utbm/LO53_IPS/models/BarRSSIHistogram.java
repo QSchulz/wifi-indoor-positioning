@@ -49,6 +49,4 @@ public class BarRSSIHistogram {
 	public void setOccurences(Integer occurences) {
 		this.occurences = occurences;
 	}
-	
-	
 }
