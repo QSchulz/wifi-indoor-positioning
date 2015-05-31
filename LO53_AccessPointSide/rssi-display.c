@@ -7,6 +7,8 @@ void signal_handler ( int sig )
 
   clear_list( device_list );
 
+  msgctl(msqid, IPC_RMID, NULL);
+
   printf( "Main thread closed.\n" );
   exit( -1 );
 }
@@ -14,6 +16,7 @@ void signal_handler ( int sig )
 int main( int argc, char** argv ) {
 
   pthread_t pcap_thread;
+  key_t key;
   char* iface = "wlan0";
 
   if ( argc == 2 ) {
@@ -48,7 +51,17 @@ int main( int argc, char** argv ) {
   }
   printf( "Successfully launched http server.\n" );
 
+  printf( "Creating message queue\n" );
+
+  if ( ( msqid = msgget( ftok( "./rssi-display.c", key ), IPC_CREAT | IPC_EXCL | 0750 ) ) == -1 ) {
+    printf( "Error while creating message queue\n" );
+    exit( -1 );
+  }
+
+  printf( "Successfully created message queue\n" );
   pthread_join ( pcap_thread, NULL );
+
+  msgctl(msqid, IPC_RMID, NULL);
 
   exit( 0 );
 

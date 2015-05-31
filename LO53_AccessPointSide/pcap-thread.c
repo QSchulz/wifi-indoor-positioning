@@ -11,10 +11,12 @@ void *pcap_function( void *arg ) {
   const u_char * packet;
   u_char * mac;
   u_char first_flags;
-  int offset = 0;
+  int offset = 0, i = 0;
   char rssi;
   Device * dev_info;
+  Message msg;
 
+  msg.id = 53;
   device_list = malloc( sizeof( Device* ) );
 
   // Open pcap handle to sniff traffic
@@ -59,7 +61,11 @@ void *pcap_function( void *arg ) {
         printf( "New device (%02X:%02X:%02X:%02X:%02X:%02X) detected, adding it to the list of devices.\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5] );
         dev_info = add_Device( device_list, mac );
         printf( "New device (%02X:%02X:%02X:%02X:%02X:%02X) added to the list of devices.\n", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5] );
-        //TODO: Add a message to the message queue read by the HTTP client which will send a POST request to the server
+
+        for ( i = 0; i < 6; i++ ) {
+          msg.mac[i] = mac[i];
+        }
+        msgsnd( msqid, &msg, sizeof( Message ) - 4, 0 );
 
       }
 

@@ -2,14 +2,22 @@
 #define _PCAP_THREAD_
 
 #include <sys/types.h>
-#include "rssi_list.h"
 #include <pcap.h>
 #include <semaphore.h>
 #include <signal.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#include "rssi_list.h"
 
 extern volatile sig_atomic_t got_sigint;
 extern Device ** device_list;
 extern sem_t synchro;
+extern int msqid;
+
+typedef struct {
+  long id;
+  u_char mac[6];
+} Message;
 
 struct ieee80211_header
 {
