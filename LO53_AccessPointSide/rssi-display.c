@@ -40,7 +40,14 @@ int main( int argc, char** argv ) {
 
   }
   printf( "pcap_thread created.\n" );
-  
+
+  printf( "Launching http server.\n" );
+  if ( start_http_server() == -1 ) {
+    printf( "Lauching of http server failed.\n" );
+    exit( -1 );
+  }
+  printf( "Successfully launched http server.\n" );
+
   pthread_join ( pcap_thread, NULL );
 
   exit( 0 );

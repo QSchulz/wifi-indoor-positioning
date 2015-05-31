@@ -3,7 +3,7 @@ export STAGING_DIR=/home/quentin/Documents/LO53_4/LO53_AccessPointSide/staging_d
 GCC=$(PREFIX)/toolchain/bin/mips-openwrt-linux-gcc
 LD=$(PREFIX)/toolchain/bin/mips-openwrt-linux-ld
 GCCFLAGS=-Wall -Werror -O2 -I$(PREFIX)/toolchain/include/ -I$(PREFIX)/target/usr/include/
-LDFLAGS=-L$(PREFIX)/toolchain/lib/ -L$(PREFIX)/target/usr/lib/ -ldl -lpcap -lm -pthread -lz
+LDFLAGS=-L$(PREFIX)/toolchain/lib/ -L$(PREFIX)/target/usr/lib/ -ldl -lpcap -lm -pthread -lmicrohttpd
 
 TARGET=rssi-display
 

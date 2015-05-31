@@ -5,6 +5,7 @@
 #include <signal.h>
 #include "pcap-thread.h"
 #include "rssi_list.h"
+#include "http-server.h"
 
 void signal_handler ( int sig );
 
