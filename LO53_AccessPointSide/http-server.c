@@ -73,7 +73,7 @@ char * build_Device(Device * e, char * buf) {
  */
 char * build_buffer(char* buffer, char ** mac_addresses, unsigned short nb_macs) {
 
-  int i = 0, j = 0, nb_occurences = 0, nb_total_occurences = 0;
+  int i = 0, nb_occurences = 0, nb_total_occurences = 0;
   Rssi_histogram_bar *curr_bar = NULL;
   Occurence *curr_occurence = NULL;
   Device *device;

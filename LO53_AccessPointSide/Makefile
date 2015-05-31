@@ -12,8 +12,8 @@ all: $(TARGET)
 %.o : %.c %.h
 	$(GCC) $(GCCFLAGS) -o $@ -c $<
 
-rssi-display: rssi-display.o rssi_list.o pcap-thread.o
-	$(GCC) $(LDFLAGS) -o rssi-display rssi-display.o rssi_list.o pcap-thread.o
+rssi-display: rssi-display.o rssi_list.o pcap-thread.o http-server.o http-client.o
+	$(GCC) $(LDFLAGS) -o rssi-display rssi-display.o rssi_list.o pcap-thread.o http-server.o http-client.o
 
 clean:
 	rm -f *.o

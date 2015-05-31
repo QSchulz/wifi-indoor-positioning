@@ -16,7 +16,7 @@ void signal_handler ( int sig )
 int main( int argc, char** argv ) {
 
   pthread_t pcap_thread, http_client_thread;
-  key_t key;
+  key_t key = 0;
   char* iface = "wlan0";
 
   if ( argc == 2 ) {
