@@ -1,5 +1,6 @@
-PREFIX=/home/quentin/Documents/LO53_4/LO53_AccessPointSide/staging_dir
-export STAGING_DIR=/home/quentin/Documents/LO53_4/LO53_AccessPointSide/staging_dir
+CURR_DIR=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+PREFIX=$(CURR_DIR)staging_dir
+export STAGING_DIR=$(CURR_DIR)staging_dir
 GCC=$(PREFIX)/toolchain/bin/mips-openwrt-linux-gcc
 LD=$(PREFIX)/toolchain/bin/mips-openwrt-linux-ld
 GCCFLAGS=-Wall -Werror -O2 -I$(PREFIX)/toolchain/include/ -I$(PREFIX)/target/usr/include/
