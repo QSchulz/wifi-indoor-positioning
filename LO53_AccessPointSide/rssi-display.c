@@ -15,7 +15,7 @@ void signal_handler ( int sig )
 
 int main( int argc, char** argv ) {
 
-  pthread_t pcap_thread;
+  pthread_t pcap_thread, http_client_thread;
   key_t key;
   char* iface = "wlan0";
 
@@ -53,12 +53,21 @@ int main( int argc, char** argv ) {
 
   printf( "Creating message queue\n" );
 
-  if ( ( msqid = msgget( ftok( "./rssi-display.c", key ), IPC_CREAT | IPC_EXCL | 0750 ) ) == -1 ) {
+  if ( ( msqid = msgget( ftok( "./http", key ), IPC_CREAT | IPC_EXCL | 0750 ) ) == -1 ) {
     printf( "Error while creating message queue\n" );
     exit( -1 );
   }
 
   printf( "Successfully created message queue\n" );
+
+  printf( "Creating http_client_thread.\n" );
+  if ( pthread_create( &http_client_thread, NULL, http_client_function, (void *) NULL ) != 0 ) {
+    printf( "Failed to create http_client_thread.\n" ),
+    exit( -1 );
+  }
+  printf( "http_client_thread created.\n" );
+
+  pthread_join ( http_client_thread, NULL );
   pthread_join ( pcap_thread, NULL );
 
   msgctl(msqid, IPC_RMID, NULL);
