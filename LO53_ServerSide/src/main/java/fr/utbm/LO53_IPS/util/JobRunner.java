@@ -5,9 +5,19 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TimerTask;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.google.common.base.Joiner;
+
+import fr.utbm.LO53_IPS.models.BarRSSIHistogram;
+import fr.utbm.LO53_IPS.models.Device;
+import fr.utbm.LO53_IPS.models.RSSIHistogram;
 import fr.utbm.LO53_IPS.services.DatabaseService;
 import fr.utbm.LO53_IPS.services.JSONService;
 
@@ -15,23 +25,23 @@ public class JobRunner extends TimerTask{
 
 	private final String USER_AGENT = "IPS_Server";
 	private DatabaseService databaseService;
-	private JSONService jsonService;
 	
 	public JobRunner(){
 		databaseService = new DatabaseService();
-		jsonService = new JSONService();
 	}
 	
 	@Override
 	public void run() {
 		// Get the devices RSSI from the Database
 		List<String> MACAddresses = databaseService.getDevicesMACAddress();
-		// Build JSON RSSI string
-		String JSONMACAddresses = jsonService.buildDeviceMACAddressesJSON(MACAddresses);
-		System.out.println("Data to send : " + JSONMACAddresses);
+		// Build RSSI string, format : A1:B2:C3:D4:E5:F6,A2:B3:C4:D5:E6:F7... etc. (coma separated)
+		String ListMACAddressString = Joiner.on(",").join(MACAddresses);
+		System.out.println("Data to send : " + ListMACAddressString);
+		
 		// Request RSSI
 		try {
-			sendPost();
+			// TODO : send it for all the APs
+			sendGetRSSI(ListMACAddressString);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -41,28 +51,17 @@ public class JobRunner extends TimerTask{
 		
 	}
 	
-	public void sendPost() throws Exception{
-		String url = "http://jsonplaceholder.typicode.com/posts";
+	public List<RSSIHistogram> sendGetRSSI(String ListMACAddressString) throws Exception{
+		// TODO : replace with the true AP addresses
+		String url = "http://localhost:8080/LO53_IPS/getRSSI?=MACAddresses=" + ListMACAddressString;
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
  
-		//add reuqest header
-		con.setRequestMethod("POST");
+		con.setRequestMethod("GET");
 		con.setRequestProperty("User-Agent", USER_AGENT);
-		con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
- 
-		String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
- 
-		// Send post request
-		con.setDoOutput(true);
-		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-		wr.writeBytes(urlParameters);
-		wr.flush();
-		wr.close();
  
 		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'POST' request to URL : " + url);
-		System.out.println("Post parameters : " + urlParameters);
+		System.out.println("\nSending 'GET' request to URL : " + url);
 		System.out.println("Response Code : " + responseCode);
  
 		BufferedReader in = new BufferedReader(
@@ -77,6 +76,47 @@ public class JobRunner extends TimerTask{
  
 		//print result
 		System.out.println(response.toString());
+		
+		return getRSSIHistogramFromString(response.toString());
+	}
+	
+	public List<RSSIHistogram> getRSSIHistogramFromString(String histogramString){
+		
+		List<RSSIHistogram> histogramSample = new ArrayList<RSSIHistogram>();
+		
+		JSONObject jObj = new JSONObject(histogramString);
+		
+		JSONArray histogramArray = jObj.getJSONArray("results");
+		
+		for(int i=0;i<histogramArray.length();++i){
+			
+			RSSIHistogram model = new RSSIHistogram();
+			
+			
+			JSONObject histogramObject = histogramArray.getJSONObject(i);
+			String deviceMACAddress = histogramObject.getString("mac");
+			JSONArray RSSIArray = histogramObject.getJSONArray("histogram");
+			Device deviceModel = new Device(deviceMACAddress, "");
+			List<BarRSSIHistogram> barListModel = new ArrayList<BarRSSIHistogram>();
+			
+			for(int j = 0; j < RSSIArray.length(); ++j){
+				JSONObject BarRSSIObject = RSSIArray.getJSONObject(j);
+				double RSSIValue = BarRSSIObject.getDouble("rssi");
+				int occurences = BarRSSIObject.getInt("occurences");
+				
+				barListModel.add(new BarRSSIHistogram(RSSIValue, occurences, model));
+			}
+			
+			int totalOccurences = histogramObject.getInt("total_occurences");
+			
+			model.setDevice(deviceModel);
+			model.setValue(barListModel);
+			// TODO : create a totalOccurences property on the BarRSSIHistogram object
+			
+			histogramSample.add(model);
+		}
+		
+		return histogramSample;
 	}
 
 }

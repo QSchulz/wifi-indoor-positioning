@@ -20,6 +20,12 @@
 		<servlet-class>fr.utbm.LO53_IPS.servlets.AccessPointServlet</servlet-class>
 	</servlet>
 
+	<!--  to remove when releasing project  -->
+	<servlet>
+		<servlet-name>FakeAPServlet</servlet-name>
+		<servlet-class>fr.utbm.LO53_IPS.servlets.FakeAPServlet</servlet-class>
+	</servlet>
+
 	<servlet-mapping>
 		<servlet-name>AccessPointServlet</servlet-name>
 		<url-pattern>/saveDevice</url-pattern>
@@ -28,6 +34,12 @@
 	<servlet-mapping>
 		<servlet-name>AndroidDeviceServlet</servlet-name>
 		<url-pattern>/getLocation</url-pattern>
+	</servlet-mapping>
+
+	<!--  to remove when releasing project  -->
+	<servlet-mapping>
+		<servlet-name>FakeAPServlet</servlet-name>
+		<url-pattern>/getRSSI</url-pattern>
 	</servlet-mapping>
   
 </web-app>
