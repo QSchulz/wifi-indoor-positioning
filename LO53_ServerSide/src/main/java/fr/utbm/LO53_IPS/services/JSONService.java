@@ -14,11 +14,11 @@ public class JSONService {
 	
 	public JSONService(){}
 	
-	public String buildPositionListJSON(Set<Position> positions){
+	public String buildPositionListJSON(List<Position> positions){
 		
 		String JSONPositionsString = "{\"positions\":[";
 		
-		Set<String> JSONPositions = new HashSet();
+		List<String> JSONPositions = new ArrayList();
 		
 		for(Position p:positions){
 			JSONPositions.add(p.toJSON());

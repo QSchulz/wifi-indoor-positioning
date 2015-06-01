@@ -2,6 +2,7 @@ package fr.utbm.LO53_IPS.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -26,7 +27,7 @@ public class AndroidDeviceServlet extends HttpServlet {
 	public void doGet( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException{
 		
 		String MACAddress = request.getParameter("MACAddress");
-		Set<Position> positions = positionningService.getAllPositions(MACAddress);
+		List<Position> positions = positionningService.getAllPositions(MACAddress);
 		String JSONPositions = "";
 		
 		if(positions.size() > 0){

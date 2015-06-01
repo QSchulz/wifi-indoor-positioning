@@ -8,8 +8,8 @@
             <column name="positionID" />
             <generator class="identity" />
         </id>
-        <property name="Timestamp" type="java.sql.Timestamp">
-            <column name="Timestamp" not-null="true"/>
+        <property name="timestamp" type="java.sql.Timestamp">
+            <column name="timestamp" not-null="true"/>
         </property>
         <many-to-one name="device" column="FK_DeviceID" 
         	class="fr.utbm.LO53_IPS.models.Device" not-null="true"/>

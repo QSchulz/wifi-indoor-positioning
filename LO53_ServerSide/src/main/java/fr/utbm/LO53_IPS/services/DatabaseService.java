@@ -88,30 +88,27 @@ public class DatabaseService {
 		HibernateUtil.shutdown();
 	}
 	
-	public Set<Position> getAllPositionsFromDatabase(String macAddress) {
+	public List<Position> getAllPositionsFromDatabase(String macAddress) {
 
 		Session session = HibernateUtil.createSessionFactory().openSession();
 
 		String queryString =  "select position" 
 							+ " from Position position join position.device device"
 							+ " where device.MACAddress = '" + macAddress + "'"
-							+ " order by position.Timestamp";
+							+ " order by position.timestamp asc";
 		
 		Query query = session.createQuery(queryString);
-		List list = query.list();
-		Iterator it = list.iterator();
-		
-		Set<Position> positions = new HashSet();
+		List<Position> list = query.list();
+		Iterator<Position> it = list.iterator();
 		
 		while (it.hasNext()) {
 			Position position = (Position) it.next();
-			positions.add(position);
 			System.out.println(position);
 		}
 
 		HibernateUtil.shutdown();
 		
-		return positions;
+		return list;
 	}
 
 	public Position getLastKnownPositionFromDatabase(String macAddress) {

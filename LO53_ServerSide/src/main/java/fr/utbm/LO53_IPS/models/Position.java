@@ -6,7 +6,7 @@ public class Position {
 	
 	private Integer positionID;
 	private Coordinate coordinate;
-	private Timestamp timestamp; // TODO : change to TIMESTAMP (in the db too)
+	private Timestamp timestamp;
 	private Device device;
 	
 	public Position(){}
@@ -55,7 +55,6 @@ public class Position {
 	
 	public String toJSON(){
 		return "{"+
-				"\"positionID\":" + positionID + "," +
 				"\"x\":"+coordinate.getX()+","+
 				"\"y\":"+coordinate.getY()+","+
 				"\"timestamp\":\""+timestamp+"\"" +
