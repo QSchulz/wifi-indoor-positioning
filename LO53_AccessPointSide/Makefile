@@ -4,7 +4,7 @@ export STAGING_DIR=$(CURR_DIR)staging_dir
 GCC=$(PREFIX)/toolchain/bin/mips-openwrt-linux-gcc
 LD=$(PREFIX)/toolchain/bin/mips-openwrt-linux-ld
 GCCFLAGS=-Wall -Werror -O2 -I$(PREFIX)/toolchain/include/ -I$(PREFIX)/target/usr/include/
-LDFLAGS=-L$(PREFIX)/toolchain/lib/ -L$(PREFIX)/target/usr/lib/ -ldl -lpcap -lm -pthread -lcurl -lmicrohttpd
+LDFLAGS=-L$(PREFIX)/toolchain/lib/ -L$(PREFIX)/target/usr/lib/ -ldl -lpcap -lm -pthread -lcurl -lmicrohttpd -lz -lssl -lcrypto -lpolarssl
 
 TARGET=rssi-display
 
