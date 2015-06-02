@@ -115,15 +115,15 @@ public class DatabaseService {
 		return null;
 	}
 	
-	public void saveUserIfNotExists(NewDeviceModel model){
+	public void saveUserIfNotExists(String macAddress){
 		Session session = HibernateUtil.createSessionFactory().openSession();
 		String queryString =  "select count(*)" 
 							+ " from Device as device"
-							+ " where device.MACAddress = '" + model.getDeviceMACAddress() + "'";
+							+ " where device.MACAddress = '" + macAddress + "'";
 		Query query = session.createQuery(queryString);
 		Long count = (Long) query.uniqueResult();
 		if(count == 0){ // user doesn't exist, we save it to the db
-			saveUser(model);
+			saveUser(new NewDeviceModel(macAddress));
 		}
 		HibernateUtil.shutdown();
 	}

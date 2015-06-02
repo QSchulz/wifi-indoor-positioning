@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,43 +33,36 @@ public class AccessPointServlet extends HttpServlet {
 	//saveDevice
 	public void doPost( HttpServletRequest request, HttpServletResponse response ) throws ServletException, IOException{
 		
-		NewDeviceModel model = getNewDeviceModel(request);
-		if(model.getDeviceMACAddress() != null){
-			dbService.saveUserIfNotExists(model);
+		String macAddress = getNewDeviceMACAddress(request);
+		if(!macAddress.isEmpty()){
+			dbService.saveUserIfNotExists(macAddress);
 		}
     }
 	
-	private NewDeviceModel getNewDeviceModel(HttpServletRequest request){
+	private String getNewDeviceMACAddress(HttpServletRequest request){
 		NewDeviceModel model = new NewDeviceModel();
+		String deviceMACAddress = "";
 		try {
-			StringBuilder sb = new StringBuilder();
-		    BufferedReader br;
+
+			// TODO: take the same name as the apram sent by the AP
+			deviceMACAddress = request.getParameter("deviceMACAddress");
 			
-				br = request.getReader();
+			Pattern p = Pattern.compile("^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$");
+			Matcher m = p.matcher(deviceMACAddress);
+			boolean isCorrectFormat = m.matches();
 			
-				
-		    String str;
-		    while( (str = br.readLine()) != null ){
-		        sb.append(str);
-		    }   
-			
-			JSONObject jObj = new JSONObject(sb.toString());
-			Iterator<String> it = jObj.keys();
-			
-			while(it.hasNext())
-			{
-			    String key = it.next();
-			    
-			    if(key.equals("DeviceMACAddress")){
-			    	model.setDeviceMACAddress((String) jObj.get(key));
-			    }
+			if(isCorrectFormat){
+				return deviceMACAddress;
+			} else {
+				throw new Exception("Setting the device mac addres failed : string not a mac address");
 			}
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return model;
+		return deviceMACAddress;
 	}
 	
 }

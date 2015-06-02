@@ -35,16 +35,14 @@ public class JobRunner extends TimerTask{
 	
 	@Override
 	public void run() {
-		// Get the devices RSSI from the Database
 		List<String> MACAddresses = databaseService.getDevicesMACAddress();
 		
 		// Build devices list : all the devices that we will request
 		List<AccessPoint> accessPointList = databaseService.getAccessPoints();
 		
-		// Request RSSI
 		Map<String, List<RSSIHistogram> > mapRSSIHistogram = new HashMap<String, List<RSSIHistogram>>();
 		try {
-			mapRSSIHistogram = getRSSIHistograms(MACAddresses, accessPointList);
+			mapRSSIHistogram = getHistogramSamples(MACAddresses, accessPointList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -61,7 +59,7 @@ public class JobRunner extends TimerTask{
 	
 	
 	
-	private Map<String, List<RSSIHistogram>> getRSSIHistograms(List<String> MACAddresses, List<AccessPoint> accessPointList) {
+	private Map<String, List<RSSIHistogram>> getHistogramSamples(List<String> MACAddresses, List<AccessPoint> accessPointList) {
 		
 		String ListMACAddressString = Joiner.on(",").join(MACAddresses);
 		Map<String, List<RSSIHistogram>> mapRSSIHistogram = new HashMap<String, List<RSSIHistogram>>();
