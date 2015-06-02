@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
- 
+
 <hibernate-mapping>
-    <class name="fr.utbm.LO53_IPS.models.Position" table="position" catalog="bdd_LO53">
-        <id name="positionID" type="java.lang.Integer">
-            <column name="positionID" />
+    <class name="fr.utbm.LO53_IPS.models.AccessPoint" table="ACCESS_POINT" catalog="bdd_LO53">
+        <id name="AccessPointID" type="java.lang.Integer">
+            <column name="AccessPointID" />
             <generator class="identity" />
         </id>
-        <property name="timestamp" type="java.sql.Timestamp">
-            <column name="timestamp" not-null="true"/>
+        
+		<property name="MACAddress" type="java.lang.String">
+            <column name="MACAddress" not-null="true"/>
         </property>
-        <many-to-one name="device" column="FK_DeviceID" 
-        	class="fr.utbm.LO53_IPS.models.Device" not-null="true"/>
+        
         <component name="Coordinate" class="fr.utbm.LO53_IPS.models.Coordinate">
 			<property name="x" type="java.lang.Integer">
 				<column name="x" not-null="true" />

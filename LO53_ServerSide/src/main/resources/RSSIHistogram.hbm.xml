@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+
+<hibernate-mapping>
+    <class name="fr.utbm.LO53_IPS.models.RSSIHistogram" table="RSSI_Histogram" catalog="bdd_LO53">
+        <id name="RSSIHistogramID" type="java.lang.Integer">
+            <column name="HistogramID" />
+            <generator class="identity" />
+        </id>
+        	
+       	<many-to-one name="accessPoint" column="FK_AccessPointID" 
+        	class="fr.utbm.LO53_IPS.models.AccessPoint" not-null="true"/>
+        
+        <many-to-one name="fingerprint" column="FK_FingerprintID" 
+        	class="fr.utbm.LO53_IPS.models.HistogramFingerprint" not-null="true"/>	
+        	        
+        <bag name="value" inverse="true" table="RSSI_OCCURENCES" lazy="false" cascade="all">
+            <key column="FK_HistogramID" not-null="true"/>
+            <one-to-many class="fr.utbm.LO53_IPS.models.BarRSSIHistogram" />
+        </bag>
+        	
+        
+    </class>
+</hibernate-mapping>

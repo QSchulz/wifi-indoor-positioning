@@ -3,3 +3,9 @@ LO53_ServerSide/target/*
 LO53_ServerSide/.settings/*
 LO53_ServerSide/.classpath
 LO53_ServerSide/.project
+LO53_AccessPointSide/*.o
+LO53_AccessPointSide/*~
+LO53_AccessPointSide/*.pdf
+LO53_AccessPointSide/*.tar.gz
+LO53_AccessPointSide/staging_dir/*
+LO53_AccessPointSide/rssi-display

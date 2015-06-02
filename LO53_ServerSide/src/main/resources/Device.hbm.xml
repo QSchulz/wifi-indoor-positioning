@@ -14,9 +14,9 @@
         <property name="Name" type="string">
             <column name="Name" length="45" not-null="false" />
         </property>
-        <set name="positions" inverse="true">
+        <bag name="positions" inverse="true">
             <key column="FK_DeviceID"/>
             <one-to-many class="fr.utbm.LO53_IPS.models.Position" />
-        </set>
+        </bag>
     </class>
 </hibernate-mapping>

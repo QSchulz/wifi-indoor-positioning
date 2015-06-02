@@ -1,5 +1,6 @@
 package fr.utbm.LO53_IPS.services;
 
+import java.util.List;
 import java.util.Set;
 
 import fr.utbm.LO53_IPS.models.Position;
@@ -20,7 +21,7 @@ public class PositionningService {
 		return null;
 	}
 	
-	public Set<Position> getAllPositions(String macAddress){
+	public List<Position> getAllPositions(String macAddress){
 		return databaseService.getAllPositionsFromDatabase(macAddress);
 	}
 	
