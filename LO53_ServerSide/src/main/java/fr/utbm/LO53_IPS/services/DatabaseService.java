@@ -145,13 +145,13 @@ public class DatabaseService {
 							+ " from Device device";
 		
 		Query query = session.createQuery(queryString);
-		List list = query.list();
-		Iterator it = list.iterator();
+		List<String> list = query.list();
+		Iterator<String> it = list.iterator();
 		
-		List<String> MACAddresses = new ArrayList();
+		List<String> MACAddresses = new ArrayList<String>();
 		
 		while (it.hasNext()) {
-			String MACAddress = (String) it.next();
+			String MACAddress = it.next();
 			MACAddresses.add(MACAddress);
 			System.out.println(MACAddress);
 		}
@@ -160,5 +160,28 @@ public class DatabaseService {
 		
 		return MACAddresses;
 		
+	}
+
+	public List<AccessPoint> getAccessPoints() {
+		Session session = HibernateUtil.createSessionFactory().openSession();
+
+		String queryString =  "from AccessPoint ap"
+							+ " where ap.ipAddress <> ''";
+		
+		Query query = session.createQuery(queryString);
+		List<AccessPoint> list = query.list();
+		Iterator<AccessPoint> it = list.iterator();
+		
+		List<AccessPoint> accessPointList = new ArrayList<AccessPoint>();
+		
+		while (it.hasNext()) {
+			AccessPoint ap = it.next();
+			accessPointList.add(ap);
+			System.out.println("Access point extracted: MAC:" + ap.getMACAddress() + " IP:" + ap.getIpAddress());
+		}
+
+		HibernateUtil.shutdown();
+		
+		return accessPointList;
 	}
 }

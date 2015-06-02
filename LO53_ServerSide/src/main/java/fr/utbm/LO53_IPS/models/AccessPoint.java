@@ -4,6 +4,7 @@ package fr.utbm.LO53_IPS.models;
 public class AccessPoint {
 	private Integer AccessPointID;
 	private String MACAddress;
+	private String ipAddress;
 	private Coordinate coordinate;
 
 	public AccessPoint(){
@@ -45,5 +46,13 @@ public class AccessPoint {
 
 	public void setCoordinate(Coordinate coordinate) {
 		this.coordinate = coordinate;
+	}
+
+	public String getIpAddress() {
+		return ipAddress;
+	}
+
+	public void setIpAddress(String ipAddress) {
+		this.ipAddress = ipAddress;
 	}
 }
