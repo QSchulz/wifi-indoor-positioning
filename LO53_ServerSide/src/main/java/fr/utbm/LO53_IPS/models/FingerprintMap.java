@@ -88,8 +88,7 @@ public class FingerprintMap {
 				}
 			}
 			else{
-				end =  true;
-				probability = 0;
+				end = true;
 			}
 		}
 		
@@ -107,7 +106,7 @@ public class FingerprintMap {
 			value_histogram1_i = value_histogram1.get(i);
 			value_histogram2_j = value_histogram2.get(j);
 			if(value_histogram1_i.getValue() == value_histogram2_j.getValue()){
-				prob = prob + Math.min(value_histogram1_i.getOccurences(),value_histogram2_j.getOccurences());
+				prob = prob + Math.min(value_histogram1_i.getOccurences()/histogram1.getTotalOccurences(),value_histogram2_j.getOccurences()/histogram2.getTotalOccurences());
 				++i;
 				++j;
 			}
