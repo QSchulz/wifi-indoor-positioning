@@ -13,6 +13,10 @@
             <column name="MACAddress" not-null="true"/>
         </property>
         
+        <property name="ipAddress" type="java.lang.String">
+        	<column name="ipAddress"/>
+        </property>
+        
         <component name="Coordinate" class="fr.utbm.LO53_IPS.models.Coordinate">
 			<property name="x" type="java.lang.Integer">
 				<column name="x" not-null="true" />

@@ -6,8 +6,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TimerTask;
 
 import org.json.JSONArray;
@@ -15,6 +17,7 @@ import org.json.JSONObject;
 
 import com.google.common.base.Joiner;
 
+import fr.utbm.LO53_IPS.models.AccessPoint;
 import fr.utbm.LO53_IPS.models.BarRSSIHistogram;
 import fr.utbm.LO53_IPS.models.Device;
 import fr.utbm.LO53_IPS.models.RSSIHistogram;
@@ -32,28 +35,63 @@ public class JobRunner extends TimerTask{
 	
 	@Override
 	public void run() {
-		// Get the devices RSSI from the Database
 		List<String> MACAddresses = databaseService.getDevicesMACAddress();
-		// Build RSSI string, format : A1:B2:C3:D4:E5:F6,A2:B3:C4:D5:E6:F7... etc. (coma separated)
-		String ListMACAddressString = Joiner.on(",").join(MACAddresses);
-		System.out.println("Data to send : " + ListMACAddressString);
 		
-		// Request RSSI
+		// Build devices list : all the devices that we will request
+		List<AccessPoint> accessPointList = databaseService.getAccessPoints();
+		
+		Map<String, List<RSSIHistogram> > mapRSSIHistogram = new HashMap<String, List<RSSIHistogram>>();
 		try {
-			// TODO : send it for all the APs
-			sendGetRSSI(ListMACAddressString);
+			mapRSSIHistogram = getHistogramSamples(MACAddresses, accessPointList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		// Compute location with the requested RSSI
-		
-		// Store the location into the database
-		
+		Iterator it = mapRSSIHistogram.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry pair = (Map.Entry)it.next();
+	        System.out.println(pair.getKey() + " = " + pair.getValue());
+	        // compute device location
+	        
+	        // Store the location into the database
+	    }
 	}
 	
-	public List<RSSIHistogram> sendGetRSSI(String ListMACAddressString) throws Exception{
+	
+	
+	private Map<String, List<RSSIHistogram>> getHistogramSamples(List<String> MACAddresses, List<AccessPoint> accessPointList) {
+		
+		String ListMACAddressString = Joiner.on(",").join(MACAddresses);
+		Map<String, List<RSSIHistogram>> mapRSSIHistogram = new HashMap<String, List<RSSIHistogram>>();
+		
+		for(String deviceMACAddress : MACAddresses){
+			mapRSSIHistogram.put(deviceMACAddress, new ArrayList<RSSIHistogram>());
+		}
+		
+		for(AccessPoint ap : accessPointList){
+			
+			List<RSSIHistogram> histogramSample = new ArrayList<RSSIHistogram>();
+			
+			try {
+				histogramSample = sendGetRSSI(ListMACAddressString, ap);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			// store for each device the corresponding RSSIHistogram
+			for(RSSIHistogram histogram : histogramSample){
+				mapRSSIHistogram.get(histogram.getDevice().getMACAddress()).add(histogram);
+			}
+			
+		}
+		
+		return mapRSSIHistogram;
+	}
+
+	public List<RSSIHistogram> sendGetRSSI(String ListMACAddressString, AccessPoint accessPoint) throws Exception{
 		// TODO : replace with the true AP addresses
-		String url = "http://localhost:8080/LO53_IPS/getRSSI?=MACAddresses=" + ListMACAddressString;
+		String url = "http://"+accessPoint.getIpAddress()+"/?mac_addrs=" + ListMACAddressString;
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
  

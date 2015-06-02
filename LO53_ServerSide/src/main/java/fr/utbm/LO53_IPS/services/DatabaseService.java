@@ -116,15 +116,15 @@ public class DatabaseService {
 		return null;
 	}
 	
-	public void saveUserIfNotExists(NewDeviceModel model){
+	public void saveUserIfNotExists(String macAddress){
 		Session session = HibernateUtil.createSessionFactory().openSession();
 		String queryString =  "select count(*)" 
 							+ " from Device as device"
-							+ " where device.MACAddress = '" + model.getDeviceMACAddress() + "'";
+							+ " where device.MACAddress = '" + macAddress + "'";
 		Query query = session.createQuery(queryString);
 		Long count = (Long) query.uniqueResult();
 		if(count == 0){ // user doesn't exist, we save it to the db
-			saveUser(model);
+			saveUser(new NewDeviceModel(macAddress));
 		}
 		HibernateUtil.shutdown();
 	}
@@ -146,13 +146,13 @@ public class DatabaseService {
 							+ " from Device device";
 		
 		Query query = session.createQuery(queryString);
-		List list = query.list();
-		Iterator it = list.iterator();
+		List<String> list = query.list();
+		Iterator<String> it = list.iterator();
 		
-		List<String> MACAddresses = new ArrayList();
+		List<String> MACAddresses = new ArrayList<String>();
 		
 		while (it.hasNext()) {
-			String MACAddress = (String) it.next();
+			String MACAddress = it.next();
 			MACAddresses.add(MACAddress);
 			System.out.println(MACAddress);
 		}
@@ -163,8 +163,31 @@ public class DatabaseService {
 		
 	}
 
+
 	public FingerprintMap getMap() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	public List<AccessPoint> getAccessPoints() {
+		Session session = HibernateUtil.createSessionFactory().openSession();
+
+		String queryString =  "from AccessPoint ap"
+							+ " where ap.ipAddress <> ''";
+		
+		Query query = session.createQuery(queryString);
+		List<AccessPoint> list = query.list();
+		Iterator<AccessPoint> it = list.iterator();
+		
+		List<AccessPoint> accessPointList = new ArrayList<AccessPoint>();
+		
+		while (it.hasNext()) {
+			AccessPoint ap = it.next();
+			accessPointList.add(ap);
+			System.out.println("Access point extracted: MAC:" + ap.getMACAddress() + " IP:" + ap.getIpAddress());
+		}
+
+		HibernateUtil.shutdown();
+		
+		return accessPointList;
 	}
 }
