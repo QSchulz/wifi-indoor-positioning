@@ -90,6 +90,14 @@ public class Device {
 		return path;
 	}
 	
+	public List<PolynomialFunctionLagrangeForm> getPath() {
+		return path;
+	}
+
+	public void setPath(List<PolynomialFunctionLagrangeForm> path) {
+		this.path = path;
+	}
+
 	public List<double[]> separeCoordinate(List<Position> list){
 		double[] X = null;
 		double[] Y = null;
