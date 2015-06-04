@@ -1,5 +1,6 @@
 package fr.utbm.LO53_IPS.services;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
@@ -27,6 +28,12 @@ public class PositionningService {
 	
 	public Position getLastKnownPosition(String macAddress){
 		return databaseService.getLastKnownPositionFromDatabase(macAddress);
+	}
+
+	public List<Position> getAllPositionsSinceTimestamp(String macAddress,
+			Timestamp timestamp) {
+
+		return databaseService.getAllPositionsFromDatabaseSinceTimestamp(macAddress, timestamp);
 	}
 	
 }

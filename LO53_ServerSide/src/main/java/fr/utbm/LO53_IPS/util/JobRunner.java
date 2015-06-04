@@ -53,7 +53,10 @@ public class JobRunner extends TimerTask{
 	        System.out.println(pair.getKey() + " = " + pair.getValue());
 	        // compute device location
 	        
+	        // compute smoothed path
+	        
 	        // Store the location into the database
+	        
 	    }
 	}
 	

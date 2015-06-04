@@ -33,7 +33,7 @@
 
 	<servlet-mapping>
 		<servlet-name>AndroidDeviceServlet</servlet-name>
-		<url-pattern>/getLocation</url-pattern>
+		<url-pattern>/getPath</url-pattern>
 	</servlet-mapping>
 
 	<!--  to remove when releasing project  -->

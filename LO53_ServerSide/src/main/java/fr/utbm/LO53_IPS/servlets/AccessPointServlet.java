@@ -45,7 +45,7 @@ public class AccessPointServlet extends HttpServlet {
 		try {
 
 			// TODO: take the same name as the apram sent by the AP
-			deviceMACAddress = request.getParameter("deviceMACAddress");
+			deviceMACAddress = request.getParameter("DeviceMACAddress");
 			
 			Pattern p = Pattern.compile("^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$");
 			Matcher m = p.matcher(deviceMACAddress);

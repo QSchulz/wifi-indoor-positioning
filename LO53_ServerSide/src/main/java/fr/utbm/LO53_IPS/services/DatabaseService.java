@@ -184,4 +184,29 @@ public class DatabaseService {
 		
 		return accessPointList;
 	}
+
+	public List<Position> getAllPositionsFromDatabaseSinceTimestamp(
+			String macAddress, Timestamp timestamp) {
+
+		Session session = HibernateUtil.createSessionFactory().openSession();
+
+		String queryString =  "select position" 
+							+ " from Position position join position.device device"
+							+ " where device.MACAddress = '" + macAddress + "'"
+							+ " and position.timestamp >= '"+timestamp+"'"
+							+ " order by position.timestamp asc";
+		
+		Query query = session.createQuery(queryString);
+		List<Position> list = query.list();
+		Iterator<Position> it = list.iterator();
+		
+		while (it.hasNext()) {
+			Position position = (Position) it.next();
+			System.out.println(position);
+		}
+
+		HibernateUtil.shutdown();
+		
+		return list;
+	}
 }
