@@ -17,6 +17,7 @@ import fr.utbm.LO53_IPS.models.AccessPoint;
 import fr.utbm.LO53_IPS.models.BarRSSIHistogram;
 import fr.utbm.LO53_IPS.models.Coordinate;
 import fr.utbm.LO53_IPS.models.Device;
+import fr.utbm.LO53_IPS.models.FingerprintMap;
 import fr.utbm.LO53_IPS.models.HistogramFingerprint;
 import fr.utbm.LO53_IPS.models.NewDeviceModel;
 import fr.utbm.LO53_IPS.models.Position;
@@ -162,6 +163,11 @@ public class DatabaseService {
 		
 	}
 
+
+	public FingerprintMap getMap() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	public List<AccessPoint> getAccessPoints() {
 		Session session = HibernateUtil.createSessionFactory().openSession();
 

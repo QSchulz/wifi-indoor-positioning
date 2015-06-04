@@ -10,6 +10,7 @@ public class RSSIHistogram {
 	private AccessPoint accessPoint;
 	private HistogramFingerprint fingerprint;
 	private List<BarRSSIHistogram> value;
+	private int totalOccurences;
 	
 	public RSSIHistogram(){}
 
@@ -71,5 +72,13 @@ public class RSSIHistogram {
 
 	public void setFingerprint(HistogramFingerprint fingerprint) {
 		this.fingerprint = fingerprint;
+	}
+
+	public int getTotalOccurences() {
+		return totalOccurences;
+	}
+
+	public void setTotalOccurences(int totalOccurences) {
+		this.totalOccurences = totalOccurences;
 	}
 }
