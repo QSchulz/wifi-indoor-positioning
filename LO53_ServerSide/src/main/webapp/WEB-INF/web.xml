@@ -11,8 +11,8 @@
  </listener>
   
   <servlet>
-		<servlet-name>AndroidDeviceServlet</servlet-name>
-		<servlet-class>fr.utbm.LO53_IPS.servlets.AndroidDeviceServlet</servlet-class>
+		<servlet-name>PathServlet</servlet-name>
+		<servlet-class>fr.utbm.LO53_IPS.servlets.PathServlet</servlet-class>
 	</servlet>
 
 	<servlet>
@@ -26,13 +26,23 @@
 		<servlet-class>fr.utbm.LO53_IPS.servlets.FakeAPServlet</servlet-class>
 	</servlet>
 
+	<servlet>
+		<servlet-name>LocationServlet</servlet-name>
+		<servlet-class>fr.utbm.LO53_IPS.servlets.LocationServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>LocationServlet</servlet-name>
+		<url-pattern>/getLocation</url-pattern>
+	</servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>AccessPointServlet</servlet-name>
 		<url-pattern>/saveDevice</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
-		<servlet-name>AndroidDeviceServlet</servlet-name>
+		<servlet-name>PathServlet</servlet-name>
 		<url-pattern>/getPath</url-pattern>
 	</servlet-mapping>
 

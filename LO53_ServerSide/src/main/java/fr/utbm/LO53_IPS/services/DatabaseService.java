@@ -113,7 +113,19 @@ public class DatabaseService {
 	}
 
 	public Position getLastKnownPositionFromDatabase(String macAddress) {
-		return null;
+		Session session = HibernateUtil.createSessionFactory().openSession();
+
+		String queryString =  "select position" 
+							+ " from Position position join position.device device"
+							+ " where device.MACAddress = '" + macAddress + "'"
+							+ " order by position.timestamp desc";
+		
+		Query query = session.createQuery(queryString);
+		List<Position> list = query.list();
+
+		HibernateUtil.shutdown();
+		
+		return list.get(0);
 	}
 	
 	public void saveUserIfNotExists(String macAddress){

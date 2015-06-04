@@ -19,12 +19,12 @@ import fr.utbm.LO53_IPS.models.Position;
 import fr.utbm.LO53_IPS.services.PositionningService;
 import fr.utbm.LO53_IPS.services.JSONService;
 
-public class AndroidDeviceServlet extends HttpServlet {
+public class PathServlet extends HttpServlet {
 
 	private PositionningService positionningService;
 	private JSONService JSONService;
 	
-	public AndroidDeviceServlet(){
+	public PathServlet(){
 		this.positionningService = new PositionningService();
 		this.JSONService = new JSONService();
 	}
