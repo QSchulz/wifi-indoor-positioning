@@ -11,21 +11,23 @@ import fr.utbm.LO53_IPS.models.Position;
 public class SmoothingPathService {
 	
 	
-	public void createPath(Device dev){
+	public List<PolynomialFunctionLagrangeForm> createPath(Device dev){
+		List<PolynomialFunctionLagrangeForm> path = null;
 		if(dev.getPositions().size()==1){
-			dev.setPath(null);
+			path = null;
 		}
 		else if(dev.getPositions().size()==2){
 			List<double[]> coordinate = separeCoordinate(dev.getPositions());
-			dev.getPath().add(new PolynomialFunctionLagrangeForm(coordinate.get(0), coordinate.get(1)));
+			path.add(new PolynomialFunctionLagrangeForm(coordinate.get(0), coordinate.get(1)));
 		}
 		else{
 			for(int i = 1; i < dev.getPositions().size()-1; ++i){
 				List <Position>sub_path = dev.getPositions().subList(i-1, i+1);
 				List<double[]> coordinate = separeCoordinate(sub_path);
-				dev.getPath().add(new PolynomialFunctionLagrangeForm(coordinate.get(0), coordinate.get(1)));
-			}			
+				path.add(new PolynomialFunctionLagrangeForm(coordinate.get(0), coordinate.get(1)));
+			}
 		}
+		return path;
 	}
 	
 	public List<double[]> separeCoordinate(List<Position> list){
