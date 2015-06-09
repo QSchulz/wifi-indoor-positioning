@@ -21,7 +21,7 @@ public class Device {
 		this.deviceID = deviceID;
 		this.MACAddress = MACAddress;
 		this.name = name;
-		this.positions = positions;
+		this.positions = new ArrayList<Position>(positions);
 		this.path = createPath();
 	}
 	

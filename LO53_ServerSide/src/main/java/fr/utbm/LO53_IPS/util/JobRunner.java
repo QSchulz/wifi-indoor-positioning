@@ -20,29 +20,33 @@ import com.google.common.base.Joiner;
 import fr.utbm.LO53_IPS.models.AccessPoint;
 import fr.utbm.LO53_IPS.models.BarRSSIHistogram;
 import fr.utbm.LO53_IPS.models.Device;
+import fr.utbm.LO53_IPS.models.FingerprintMap;
+import fr.utbm.LO53_IPS.models.Position;
 import fr.utbm.LO53_IPS.models.RSSIHistogram;
 import fr.utbm.LO53_IPS.services.DatabaseService;
 import fr.utbm.LO53_IPS.services.JSONService;
+import fr.utbm.LO53_IPS.services.PositionningService;
 
 public class JobRunner extends TimerTask{
 
 	private final String USER_AGENT = "IPS_Server";
 	private DatabaseService databaseService;
+	private PositionningService positionningService;
 	
 	public JobRunner(){
 		databaseService = new DatabaseService();
+		positionningService = new PositionningService();
 	}
 	
 	@Override
 	public void run() {
-		List<String> MACAddresses = databaseService.getDevicesMACAddress();
-		
 		// Build devices list : all the devices that we will request
+		List<Device> devices = databaseService.getDevicesWithPositions();
 		List<AccessPoint> accessPointList = databaseService.getAccessPoints();
 		
-		Map<String, List<RSSIHistogram> > mapRSSIHistogram = new HashMap<String, List<RSSIHistogram>>();
+		Map<Device, List<RSSIHistogram> > mapRSSIHistogram = new HashMap<Device, List<RSSIHistogram>>();
 		try {
-			mapRSSIHistogram = getHistogramSamples(MACAddresses, accessPointList);
+			mapRSSIHistogram = getHistogramSamples(devices, accessPointList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -51,24 +55,30 @@ public class JobRunner extends TimerTask{
 	    while (it.hasNext()) {
 	        Map.Entry pair = (Map.Entry)it.next();
 	        System.out.println(pair.getKey() + " = " + pair.getValue());
+	        Device device = (Device) pair.getKey();
+	        
 	        // compute device location
-	        
-	        // compute smoothed path TODO : NO ? we just do that when the user asks for it ?
-	        
+	        Position newPosition = positionningService.computePosition((List<RSSIHistogram>)pair.getValue(), (Device)pair.getKey());	        
+	       
 	        // Store the location into the database
-	        
+	        databaseService.saveNewPosition(device, newPosition);
 	    }
 	}
 	
 	
 	
-	private Map<String, List<RSSIHistogram>> getHistogramSamples(List<String> MACAddresses, List<AccessPoint> accessPointList) {
+	private Map<Device, List<RSSIHistogram>> getHistogramSamples(List<Device> devices, List<AccessPoint> accessPointList) {
 		
-		String ListMACAddressString = Joiner.on(",").join(MACAddresses);
-		Map<String, List<RSSIHistogram>> mapRSSIHistogram = new HashMap<String, List<RSSIHistogram>>();
+		List<String> macAddresses = new ArrayList();
+		for(Device d:devices){
+			macAddresses.add(d.getMACAddress());
+		}
 		
-		for(String deviceMACAddress : MACAddresses){
-			mapRSSIHistogram.put(deviceMACAddress, new ArrayList<RSSIHistogram>());
+		String ListMACAddressString = Joiner.on(",").join(macAddresses);
+		Map<Device, List<RSSIHistogram>> mapRSSIHistogram = new HashMap<Device, List<RSSIHistogram>>();
+		
+		for(Device d : devices){
+			mapRSSIHistogram.put(d, new ArrayList<RSSIHistogram>());
 		}
 		
 		for(AccessPoint ap : accessPointList){

@@ -150,35 +150,54 @@ public class DatabaseService {
 		HibernateUtil.shutdown();
 	}
 
-	public List<String> getDevicesMACAddress(){
+	public List<Device> getDevicesWithPositions(){
 		
 		Session session = HibernateUtil.createSessionFactory().openSession();
 
-		String queryString =  "select distinct MACAddress" 
-							+ " from Device device";
+		String queryString =  "from Device device";
 		
 		Query query = session.createQuery(queryString);
-		List<String> list = query.list();
-		Iterator<String> it = list.iterator();
+		List<Device> list = query.list();
+		Iterator<Device> it = list.iterator();
 		
-		List<String> MACAddresses = new ArrayList<String>();
+		List<Device> devices = new ArrayList<Device>();
 		
 		while (it.hasNext()) {
-			String MACAddress = it.next();
-			MACAddresses.add(MACAddress);
-			System.out.println(MACAddress);
+			Device device = it.next();
+			devices.add(device);
 		}
 
 		HibernateUtil.shutdown();
 		
-		return MACAddresses;
+		return devices;
 		
 	}
 
 
 	public FingerprintMap getMap() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Session session = HibernateUtil.createSessionFactory().openSession();
+
+		String queryString =  "from HistogramFingerprint fingerprint";
+		
+		FingerprintMap map = new FingerprintMap();
+		
+		Query query = session.createQuery(queryString);
+		List<HistogramFingerprint> list = query.list();
+		Iterator<HistogramFingerprint> it = list.iterator();
+		
+		List<HistogramFingerprint> fingerprints = new ArrayList<HistogramFingerprint>();
+		
+		while (it.hasNext()) {
+			HistogramFingerprint fingerprint = it.next();
+			fingerprints.add(fingerprint);
+		}
+
+		map.setMap(fingerprints);
+		
+		HibernateUtil.shutdown();
+		
+		return map;
 	}
 	public List<AccessPoint> getAccessPoints() {
 		Session session = HibernateUtil.createSessionFactory().openSession();
@@ -226,5 +245,21 @@ public class DatabaseService {
 		HibernateUtil.shutdown();
 		
 		return list;
+	}
+
+	public void saveNewPosition(Device device, Position newPosition) {
+		
+		Session session = HibernateUtil.createSessionFactory().openSession();
+		session.beginTransaction();
+
+		Calendar calendar = Calendar.getInstance();
+		newPosition.setTimestamp(new Timestamp(calendar.getTimeInMillis()));
+		newPosition.setDevice(device);
+
+		session.save(newPosition);
+		session.getTransaction().commit();
+
+		HibernateUtil.shutdown();
+		
 	}
 }
