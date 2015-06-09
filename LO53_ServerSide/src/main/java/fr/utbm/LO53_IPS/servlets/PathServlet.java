@@ -52,7 +52,7 @@ public class PathServlet extends HttpServlet {
 		}
 		
 		String JSONPositions = "";
-		
+		List<PolynomialFunctionLagrangeForm> path = smoothingPathService.createPath(positions);
 		if(positions.size() > 0){
 			JSONPositions = JSONService.buildPositionListJSON(positions);
 		}
