@@ -28,29 +28,4 @@ public class JSONService {
 		JSONPositionsString += "]}";
 		return JSONPositionsString;
 	}
-	
-	public String buildDeviceMACAddressesJSON(List<String> MACAddresses){
-		
-		String JSONMACAddressesString = "{\"MACAddresses\":[";
-		List<String> quotedMACAddresses = surroundStringListWithQuotes(MACAddresses);
-		JSONMACAddressesString += Joiner.on(",").join(quotedMACAddresses);
-		JSONMACAddressesString += "]}";
-		return JSONMACAddressesString;
-	}
-	
-	private List<String> surroundStringListWithQuotes(List<String> notQuotedStrings){
-		
-		List<String> quotedStrings = new ArrayList<String>();
-		
-		for(String s : notQuotedStrings){
-			quotedStrings.add(surroundWithQuotes(s));
-		}
-		
-		return quotedStrings;
-	}
-	
-	private String surroundWithQuotes(String string){
-		return "\""+string+"\"";
-	}
-	
 }

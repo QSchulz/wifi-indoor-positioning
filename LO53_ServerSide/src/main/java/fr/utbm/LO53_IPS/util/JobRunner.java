@@ -53,7 +53,7 @@ public class JobRunner extends TimerTask{
 	        System.out.println(pair.getKey() + " = " + pair.getValue());
 	        // compute device location
 	        
-	        // compute smoothed path
+	        // compute smoothed path TODO : NO ? we just do that when the user asks for it ?
 	        
 	        // Store the location into the database
 	        
