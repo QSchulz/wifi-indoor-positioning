@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">LO53_Application</string>
+
+    <string name="label_ipAddress">192.168.0.2</string>
+    <string name="action_settings">Settings</string>
+    <string name="drawPosition">Current position</string>
+    <string name="drawPath">Trip</string>
+    <string name="validate">Valider</string>
+    <string name="title_activity_maps">Carte</string>
+    <string name="description_carte">Carte du batiment H</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>

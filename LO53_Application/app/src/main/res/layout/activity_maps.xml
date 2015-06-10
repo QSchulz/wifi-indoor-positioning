@@ -1,0 +1,45 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:id="@+id/layout"
+    tools:context="djamelfel.lo53_application.FullscreenActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <view
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            class="djamelfel.lo53_application.TouchImageView"
+            android:id="@+id/batiment"
+            android:layout_gravity="center|top"
+            android:src="@drawable/batiment"
+            android:layout_weight="1" />
+
+        <LinearLayout android:id="@+id/fullscreen_content_controls" style="?metaButtonBarStyle"
+            android:layout_width="fill_parent" android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:background="@color/black_overlay" android:orientation="horizontal"
+            tools:ignore="UselessParent">
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/drawPath"
+                android:id="@+id/drawPath"
+                android:layout_weight="1" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/drawPosition"
+                android:id="@+id/drawPosition"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>
