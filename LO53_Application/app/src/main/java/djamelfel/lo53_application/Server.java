@@ -19,23 +19,15 @@ public class Server {
     public Server(String ipServer, WifiManager manager) {
         WifiInfo info = manager.getConnectionInfo();
         _macAddress = info.getMacAddress();
-        _ipServer = "http://" + ipServer + ":8888";
+        _ipServer = "http://" + ipServer + ":8080/LO53_IPS";
         _httpClient = new AsyncHttpClient();
     }
 
-    public String getMacAddress() {
-        return _macAddress;
-    }
-
     public void connect(final Callback callback) {
-        _httpClient.get(_ipServer + "/connect", null, new AsyncHttpResponseHandler() {
+        _httpClient.get(_ipServer, null, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
-                try {
-                    callback.callbackFunction(new String(bytes, "UTF-8"));
-                } catch (UnsupportedEncodingException e) {
-                    Log.d("Error", e.toString());
-                }
+                callback.callbackFunction(statusCode);
             }
 
             @Override
@@ -46,19 +38,21 @@ public class Server {
     }
 
     public void sendRequest(String host, RequestParams params, final Callback callback) {
+        params.put("MACAddress", _macAddress);
         _httpClient.get(_ipServer + host, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int i, Header[] headers, byte[] bytes) {
                 try {
                     callback.callbackFunction(new String(bytes, "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
-                    Log.d("Error", e.toString());
+                    Log.d("OnSucces", e.toString());
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                 Log.d("onFailure", e.toString());
+                Log.i("log", e.toString());
             }
         });
     }

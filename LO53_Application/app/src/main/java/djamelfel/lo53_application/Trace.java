@@ -59,7 +59,6 @@ public class Trace extends Activity implements View.OnClickListener, Callback {
         Date date;
         long timeDifference;
         RequestParams params = new RequestParams();
-        params.put("macAddress", _server.getMacAddress());
 
         final ImageView imageView = (ImageView)findViewById(R.id.batiment);
         switch (vue.getId()) {
@@ -71,12 +70,12 @@ public class Trace extends Activity implements View.OnClickListener, Callback {
                  * Check if data are update
                  */
                 date = new Date();
-                timeDifference = date.getTime() - _path.get_lastUpdate().getTime();
+                timeDifference = date.getTime() - _path.getLastUpdate().getTime();
                 if ( _path.isEmpty() ||  timeDifference < 10000) {
                     /**
                      * If data are not updated Request HTTP
                      */
-                    _server.sendRequest("/test", params, new Callback() {
+                    _server.sendRequest("/getLocation", params, new Callback() {
                         @Override
                         public void callbackFunction(String resp) {
                             /**
@@ -89,6 +88,10 @@ public class Trace extends Activity implements View.OnClickListener, Callback {
                              */
                             Position position = _path.getLastPosition();
                             _draw.drawPoint(position.getX(), position.getY(), 30, imageView);
+                        }
+
+                        @Override
+                        public void callbackFunction(int statusCode) {
                         }
                     });
                 }
@@ -109,13 +112,15 @@ public class Trace extends Activity implements View.OnClickListener, Callback {
                  * Check if data are update
                  */
                 date = new Date();
-                timeDifference = date.getTime() - _path.get_lastUpdate().getTime();
+                timeDifference = date.getTime() - _path.getLastUpdate().getTime();
 
-                if (_path.isEmpty()) {
+                if (_path.isEmpty() || timeDifference < 1000) {
+                    if(timeDifference < 1000)
+                        params.put("timestamp", _path.getLastUpdate().toString());
                     /**
                      * If data are not updated Request HTTP
                      */
-                    _server.sendRequest("/test", params, new Callback() {
+                    _server.sendRequest("/getPath", params, new Callback() {
                         @Override
                         public void callbackFunction(String resp) {
                             /**
@@ -128,25 +133,9 @@ public class Trace extends Activity implements View.OnClickListener, Callback {
                              */
                             _draw.drawPath(_path.getPath(false), _draw, imageView);
                         }
-                    });
-                }
-                else if (timeDifference < 10000){
-                    /**
-                     * If data are not updated Request HTTP
-                     */
-                    params.put("timestamp", _path.get_lastUpdate().toString());
-                    _server.sendRequest("/test", params, new Callback() {
-                        @Override
-                        public void callbackFunction(String resp) {
-                            /**
-                             * Save data
-                             */
-                            _path.setPath(resp);
 
-                            /**
-                             * Draw data on the maps
-                             */
-                            _draw.drawPath(_path.getPath(false), _draw, imageView);
+                        @Override
+                        public void callbackFunction(int statusCode) {
                         }
                     });
                 }
@@ -162,5 +151,9 @@ public class Trace extends Activity implements View.OnClickListener, Callback {
 
     @Override
     public void callbackFunction(String resp) {
+    }
+
+    @Override
+    public void callbackFunction(int statusCode) {
     }
 }

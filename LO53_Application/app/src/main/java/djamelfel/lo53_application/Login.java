@@ -38,11 +38,15 @@ public class Login extends Activity implements View.OnClickListener {
             server.connect(new Callback() {
                 @Override
                 public void callbackFunction(String response) {
-                    if (response.equals("True"))
+                }
+
+                @Override
+                public void callbackFunction(int status) {
+                    if (status < 300 && status >= 200)
                         startActivity(intent);
                     else
                         Toast.makeText(getApplicationContext(),
-                                response, Toast.LENGTH_LONG).show();
+                                status, Toast.LENGTH_LONG).show();
                 }
             });
         }

@@ -48,7 +48,7 @@ public class Path {
         }
     }
 
-    public Date get_lastUpdate() {
+    public Date getLastUpdate() {
         return _lastUpdate;
     }
 
