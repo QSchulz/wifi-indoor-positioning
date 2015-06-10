@@ -11,5 +11,5 @@
 
 int main()
 {
-    fingerprint_generation();
+    //fingerprint_generation();
 }

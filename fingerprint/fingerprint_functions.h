@@ -33,4 +33,6 @@ double aply_fann(char* model, double distance, int wall);
 
 void fingerprint_generation();
 
+void create_training(char* measurement, char* output);
+
 #endif

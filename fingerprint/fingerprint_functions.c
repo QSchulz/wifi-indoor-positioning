@@ -4,7 +4,8 @@
  *
  *
  */
-
+#include <stdlib.h>
+#include <stdio.h>
 #include "fann.h"
 #include "floatfann.h"
 #include "ogr_api.h"
@@ -70,7 +71,7 @@ int calc_wall(RCoord ap, RCoord point){
 
         hGeometry = OGR_F_GetGeometryRef(hFeature);
         if( hGeometry != NULL
-            && wkbFlatten(OGR_G_GetGeometryType(hGeometry)) == wkbLineString )
+                && wkbFlatten(OGR_G_GetGeometryType(hGeometry)) == wkbLineString )
         {
             if(OGR_G_Intersects(line, hGeometry)){
                 nbWall+=1;
@@ -140,22 +141,68 @@ void fingerprint_generation(){
 
     int i,j,k;
     int nbWall=0;
-    double distance=0.0;
+    double distance=0.0,rssi=0.0;
 
-    for(i=0 ; i < x ; i+=STEP){
-        for(j=0 ; j < y ; j+=STEP){
+    for(i=0 ; i < x ; i++){
+        for(j=0 ; j < y ; j++){
             for(k=0 ; k<3 ; k++){
                 nbWall = calc_wall(ap[k], fp_to_real(i,j));
                 distance = calc_distance(ap[k], fp_to_real(i,j));
 
-                aply_fann("fp.net", distance, nbWall);
+                rssi=aply_fann("fp.net", distance, nbWall);
 
-                //need x(i), y(j), vector histogram
+                //fprint x(i), y(j), vector histogram
             }
         }
     }
 }
 // TODO gaussian distribution
 
-// TODO training file creation
+void create_training(char* measurement, char* output){
+    FILE* fmeasure;
+    FILE* fout;
 
+    char * line = NULL;
+    size_t len = 0;
+    ssize_t read;
+
+    RCoord ap, point;
+    int x,y;
+    double rssi = 4000.0;
+
+    fmeasure = fopen(measurement, "r");
+    fout = fopen(output, "w");
+    while ((read = getline(&line, &len, fmeasure)) != -1) {
+        char* tok;
+        if(rssi == 4000.0){
+            fprintf("%d 2 1\n", atoi(line));
+            rssi=0;
+        }
+        else{
+            tok = strtok(line, " ");
+            if(tok != NULL) x = atoi(tok);
+            tok = strtok(NULL," ");
+            if(tok != NULL) y = atoi(tok);
+
+            ap = fp_to_real(x,y);
+
+            tok = strtok(NULL," ");
+            if(tok != NULL) x = atoi(tok);
+            tok = strtok(NULL," ");
+            if(tok != NULL) y = atoi(tok);
+
+            point = fp_to_real(x,y);
+
+            tok = strtok(NULL," ");
+            if(tok != NULL) rssi = atof(tok);
+
+            fprintf("%lf %d\n%lf\n",calc_distance(ap, point),calc_wall(ap, point),rssi);
+        }
+
+    }
+
+    fclose(fmeasure);
+    fclose(fout);
+    if (line)
+        free(line);
+}
