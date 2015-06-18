@@ -125,7 +125,12 @@ public class DatabaseService {
 
 		HibernateUtil.shutdown();
 		
-		return list.get(0);
+		Position position = null;
+		if(list.size() > 0){
+			position = list.get(0);
+		}
+		
+		return position;
 	}
 	
 	public void saveUserIfNotExists(String macAddress){

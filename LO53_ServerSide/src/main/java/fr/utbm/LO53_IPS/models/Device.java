@@ -22,7 +22,7 @@ public class Device {
 		this.MACAddress = MACAddress;
 		this.name = name;
 		this.positions = new ArrayList<Position>(positions);
-		this.path = createPath();
+		this.path = new ArrayList<PolynomialFunctionLagrangeForm>();
 	}
 	
 	public Device(String MACAddress, String name, List<Position> positions)
@@ -30,13 +30,13 @@ public class Device {
 		this.MACAddress = MACAddress;
 		this.name = name;
 		this.positions = positions;
-		this.path = createPath();
+		this.path = new ArrayList<PolynomialFunctionLagrangeForm>();
 	}
 	
 	public Device(String MACAddress, String Name){
 		this.MACAddress = MACAddress;
 		this.name = Name;
-		this.path = createPath();
+		this.path = new ArrayList<PolynomialFunctionLagrangeForm>();
 	}
 	
 	public Integer getDeviceID(){

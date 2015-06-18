@@ -32,11 +32,12 @@ public class LocationServlet extends HttpServlet {
 		String MACAddress = request.getParameter("MACAddress");
 		
 		Position p = positionningService.getLastKnownPosition(MACAddress);
-		
-		response.setContentType("application/json");
-		response.setCharacterEncoding( "UTF-8" );
-		PrintWriter out = response.getWriter();
-		out.println(p.toJSON());
+		if(p != null){
+			response.setContentType("application/json");
+			response.setCharacterEncoding( "UTF-8" );
+			PrintWriter out = response.getWriter();
+			out.println(p.toJSON());
+		}
     }
 	
 }

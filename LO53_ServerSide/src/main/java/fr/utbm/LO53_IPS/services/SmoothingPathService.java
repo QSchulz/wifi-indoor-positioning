@@ -11,18 +11,18 @@ import fr.utbm.LO53_IPS.models.Position;
 public class SmoothingPathService {
 	
 	
-	public List<PolynomialFunctionLagrangeForm> createPath(Device dev){
+	public List<PolynomialFunctionLagrangeForm> createPath(List<Position> positions){
 		List<PolynomialFunctionLagrangeForm> path = null;
-		if(dev.getPositions().size()==1){
+		if(positions.size()==1){
 			path = null;
 		}
-		else if(dev.getPositions().size()==2){
-			List<double[]> coordinate = separeCoordinate(dev.getPositions());
+		else if(positions.size()==2){
+			List<double[]> coordinate = separeCoordinate(positions);
 			path.add(new PolynomialFunctionLagrangeForm(coordinate.get(0), coordinate.get(1)));
 		}
 		else{
-			for(int i = 1; i < dev.getPositions().size()-1; ++i){
-				List <Position>sub_path = dev.getPositions().subList(i-1, i+1);
+			for(int i = 1; i < positions.size()-1; ++i){
+				List <Position>sub_path = positions.subList(i-1, i+1);
 				List<double[]> coordinate = separeCoordinate(sub_path);
 				path.add(new PolynomialFunctionLagrangeForm(coordinate.get(0), coordinate.get(1)));
 			}

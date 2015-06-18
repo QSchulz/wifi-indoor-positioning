@@ -58,10 +58,12 @@ public class JobRunner extends TimerTask{
 	        Device device = (Device) pair.getKey();
 	        
 	        // compute device location
-	        Position newPosition = positionningService.computePosition((List<RSSIHistogram>)pair.getValue(), (Device)pair.getKey());	        
-	       
-	        // Store the location into the database
-	        databaseService.saveNewPosition(device, newPosition);
+	        List<RSSIHistogram> RSSIList = (List<RSSIHistogram>)pair.getValue();
+	        if(RSSIList != null && RSSIList.size()>0){
+	        	Position newPosition = positionningService.computePosition(RSSIList, (Device)pair.getKey());	        
+	        	 // Store the location into the database
+		        databaseService.saveNewPosition(device, newPosition);
+	        }
 	    }
 	}
 	

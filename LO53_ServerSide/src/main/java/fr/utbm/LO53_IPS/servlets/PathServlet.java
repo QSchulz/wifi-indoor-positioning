@@ -15,18 +15,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunctionLagrangeForm;
+
 import fr.utbm.LO53_IPS.models.Position;
 import fr.utbm.LO53_IPS.services.PositionningService;
 import fr.utbm.LO53_IPS.services.JSONService;
+import fr.utbm.LO53_IPS.services.SmoothingPathService;
 
 public class PathServlet extends HttpServlet {
 
 	private PositionningService positionningService;
 	private JSONService JSONService;
+	private SmoothingPathService smoothingPathService;
 	
 	public PathServlet(){
 		this.positionningService = new PositionningService();
 		this.JSONService = new JSONService();
+		this.smoothingPathService = new SmoothingPathService();
 	}
 	
 	// This get returns to the Android device all the path or from a certain timestamp if any
@@ -52,7 +57,7 @@ public class PathServlet extends HttpServlet {
 		}
 		
 		String JSONPositions = "";
-		List<PolynomialFunctionLagrangeForm> path = smoothingPathService.createPath(positions);
+		//List<PolynomialFunctionLagrangeForm> path = smoothingPathService.createPath(positions);
 		if(positions.size() > 0){
 			JSONPositions = JSONService.buildPositionListJSON(positions);
 		}
