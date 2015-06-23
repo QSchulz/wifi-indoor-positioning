@@ -8,11 +8,11 @@
 #ifndef DEF_FUNCTION
 #define DEF_FUNCTION
 
-#define MINX     123.00
-#define MINY     210.00
-#define MAXX     287.00
-#define MAXY     607.00
-#define STEP        1.5
+#define MINX     123
+#define MINY     210
+#define MAXX     287
+#define MAXY     607
+#define STEP     1
 
 typedef struct{
     double x;

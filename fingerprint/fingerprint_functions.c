@@ -9,7 +9,7 @@
 #include "fann.h"
 #include "floatfann.h"
 #include "ogr_api.h"
-#include "function.h"
+#include "fingerprint_functions.h"
 
 RCoord fp_to_real(int x, int y){
     RCoord elem;
@@ -36,7 +36,7 @@ double calc_distance(RCoord ap, RCoord point){
     double a = ap.x > point.x ? ap.x - point.x : point.x - ap.x;
     double b = ap.y > point.y ? ap.y - point.y : point.y - ap.y;
 
-    return sqrt(pow(a,2) + pow(b,2));
+    return (sqrt(pow(a,2) + pow(b,2))/1000);
 }
 
 int calc_wall(RCoord ap, RCoord point){
@@ -93,13 +93,14 @@ void train_fann(char* in, char* out){
     const unsigned int num_input = 2;
     const unsigned int num_output = 1;
     const unsigned int num_layers = 3;
-    const unsigned int num_neurons_hidden = 12;
-    const float desired_error = (const float) 0.001;
-    const unsigned int max_epochs = 500000;
-    const unsigned int epochs_between_reports = 1000;
+    const unsigned int num_neurons_hidden = 200;
+    const float desired_error = (const float) 50;
+    const unsigned int max_epochs = 5;
+    const unsigned int epochs_between_reports = 1;
 
     struct fann *ann = fann_create_standard(num_layers, num_input,
             num_neurons_hidden, num_output);
+    fann_set_learning_rate( ann, 0.3 );
 
     fann_set_activation_function_hidden(ann, FANN_SIGMOID_SYMMETRIC);
     fann_set_activation_function_output(ann, FANN_SIGMOID_SYMMETRIC);
@@ -123,7 +124,7 @@ double aply_fann(char* model, double distance, int wall){
 
     calc_out = fann_run(ann, input);
 
-    return (double)calc_out;
+    return (double)*calc_out;
 }
 
 void fingerprint_generation(){
@@ -175,7 +176,7 @@ void create_training(char* measurement, char* output){
     while ((read = getline(&line, &len, fmeasure)) != -1) {
         char* tok;
         if(rssi == 4000.0){
-            fprintf("%d 2 1\n", atoi(line));
+            //fprintf("%d 2 1\n", atoi(line));
             rssi=0;
         }
         else{
@@ -196,7 +197,7 @@ void create_training(char* measurement, char* output){
             tok = strtok(NULL," ");
             if(tok != NULL) rssi = atof(tok);
 
-            fprintf("%lf %d\n%lf\n",calc_distance(ap, point),calc_wall(ap, point),rssi);
+            //fprintf("%lf %d\n%lf\n",calc_distance(ap, point),calc_wall(ap, point),rssi);
         }
 
     }
